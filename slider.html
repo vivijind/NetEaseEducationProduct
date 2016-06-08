@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>slider组件</title>
+    <style type="text/css">
+        html,body{
+          height: 100%;
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+        .m-slider {
+            position: relative;
+            transition-property: transform;
+            transition-duration: 1s;
+            transition-timing-function: ease-out;
+        }
+        .m-slider, .m-slider .slide {
+            width: 100%;
+            height: 100%;
+        }
+        .m-slider .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .m-slider .slide.z-active{
+            transition: opacity .2s ease-in;
+        }
+
+        .m-slider .slide img{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform:translate(-50%,-50%);
+            -moz-transform:translate(-50%,-50%);
+            -o-transform:translate(-50%,-50%);
+            transform:translate(-50%,-50%);
+            border: 2px solid white;
+            border-radius: 2px;
+            box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+            max-width: 60%;
+        }
+
+        /* cursor */
+        .m-cursor{
+            z-index: 10;
+            text-align: center;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            padding-left: 0;
+        }
+        .m-cursor li{
+            width: 20px;
+            height: 20px;
+            color: #aaa;
+            line-height: 20px;
+            border-radius: 50%;
+            border: 2px solid #999;
+            margin-right: 4px;
+            list-style: none;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color .5s;
+        }
+        .m-cursor li:hover, .m-cursor li.z-active{
+            background-color: #999;
+            color: #fff;
+        }
+        .m-cursor li.prev, .m-cursor li.next{
+            font-family: '宋体';
+        }
+    </style>
+</head>
+<body>
+<!--     <div class="m-slider" style="transition-duration: 0s; transform: translateX(-100%) translateZ(0px); ">
+        <div class="slide z-active" style="left: 0%;">
+            <img src="/imgs/pic01.jpg">
+        </div>
+        <div class="slide" style="left: 100%;">
+            <img src="/imgs/pic02.jpg">
+        </div>
+        <div class="slide" style="left: -100%;">
+            <img src="/imgs/pic03.jpg">
+        </div>
+    </div> -->
+
+    <ul class="m-cursor">
+        <li class='prev'><</li>
+        <li class='cursor'>1</li>
+        <li class='cursor'>2</li>
+        <li class='cursor'>3</li>
+        <li class='cursor'>4</li>
+        <li class='cursor'>5</li>
+        <li class='cursor'>6</li>
+        <li class='next'>></li>
+    </ul>
+
+    <script src='js/util.js'></script>
+    <script src='js/slider.js'></script>
+    <script type="text/javascript">
+        // 轮播组件
+        var slider = new Slider({
+            // 给定视口
+            container: document.body,
+            // 轮播图片列表
+            images: [
+                "./imgs/pic01.jpg",
+                "./imgs/pic02.jpg",
+                "./imgs/pic03.jpg",
+                "./imgs/pic04.jpg",
+                "./imgs/pic05.jpg",
+                "./imgs/pic06.jpg"
+            ],
+
+            // 是否允许拖拽
+            drag: true,
+
+            // 是否自动轮播
+            auto: true
+        });
+
+        // 轮播接口
+        // slider.nav(index) 跳转 slider.next() 下一页 slider.prev() 上一页
+        // 
+        
+        // 调用测试
+        var $ = function( selector ){
+          return [].slice.call(document.querySelectorAll(selector))
+        }
+
+        // 指示器按钮
+        var cursors = $('.m-cursor .cursor');
+        var prev = $('.m-cursor .prev')[0];
+        var next = $('.m-cursor .next')[0];
+
+        // 给每个序号绑定click事件，点击定位到对应轮播图片位置
+        cursors.forEach(function(cursor, index) {
+            cursor.addEventListener('click',function() {
+                slider.nav(index);
+            });
+        });
+
+        // 给prev和next绑定事件
+        prev.addEventListener('click', function() {
+            slider.prev();
+            //传入true表示在一定时间内不点击，则自动开启轮播动画
+            slider.autoEnd(true);            
+        });
+        next.addEventListener('click', function(){
+            slider.next();
+            slider.autoEnd(true);
+        });
+
+        // 每次slider图片位置变化，cursor也变化，增加监听处理
+        slider.on('nav', function( ev ) {
+            var pageIndex = ev.pageIndex;
+            cursors.forEach(function(cursor, index) {
+                if (index === pageIndex) {
+                    cursor.className = 'z-active';
+                } else {
+                    cursor.className = '';
+                }
+            });
+        });
+
+        // 设置自动轮播
+        // setInterval(function() {
+        //     slider.next();
+        // }, 3000);
+        
+        // 设置当前跳转页
+        slider.nav(2);
+    </script>
+</body>
+</html>
