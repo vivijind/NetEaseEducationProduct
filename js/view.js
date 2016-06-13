@@ -13,13 +13,18 @@
         // 将模板复制到自身实例上
         _.extend(this,template);
 
-        // 登录
-        this.$login = _.$qs('.m-login');
         // tips
         this.$tips = _.$qs('.g-tips');
         this.$tipsClose = _.$qs('.tips-cl',this.$tips);
+
         // nav
-        this.$navInfo = _.$qs('.m-nav .nav-info');
+        this.$navConcern = _.$qs('.m-nav .nav-info .concern');
+        this.$navConcernd = _.$qs('.m-nav .nav-info .concernd');
+        this.$navCancel = _.$qs('.m-nav .nav-info .cancel');
+        this.$navFansNum = _.$qs('.m-nav .nav-info .number');
+
+        // 登录
+        this.$login = _.$qs('.m-login');
         // 
     }
 
@@ -34,8 +39,16 @@
    _.extend(View.prototype, {
         bind: function (event, handler) {
             var self = this;
-            if (event === 'removeTips') {
+            if (event === 'removeTips') {   // 不再提醒
                 _.addEvent(self.$tipsClose, 'click', function () {
+                    handler();
+                });
+            } else if (event === 'concern') {   // 点击关注按钮
+                _.addEvent(self.$navConcern, 'click', function(){
+                    handler();
+                });
+            } else if (event === 'concerndCancel') {   // 点击取消
+                _.addEvent(self.$navCancel, 'click', function(){
                     handler();
                 });
             }
@@ -46,6 +59,10 @@
                 // 根据visible显示或者关闭提醒tips
                 displayTips: function (visible) {
                     self.$tips.style.display = visible ? 'block' : 'none';
+                },
+                concern: function(concernd) {
+                    self.$concern.style.display = concernd ? 'none' : 'block';
+                    self.$concernd.style.display = concernd ? 'block' : 'none';
                 }
             };
 

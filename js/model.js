@@ -10,13 +10,17 @@
 
 
 	_.extend(Model.prototype,{
-		// 控制tips cookie
+		/* 控制tips cookie */
 		displayTips: function(callback){
 			this.cookie.getCookie('tipsSuc',callback);
 		},
 		removeTips: function(){
 			this.cookie.setCookie('tipsSuc',1);
-		}
+		},
+		/* 登陆cookie */
+		loginShow: function(){
+			this.cookie.getCookie('loginSuc', callback);
+		},
 	});
 
   	//          Exports
