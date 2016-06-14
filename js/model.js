@@ -52,7 +52,7 @@
         getHotCourse: function() {
             var self = this;
             self.store.getHotCourse(function(data){
-                callback.call(self,JSON.parse(data))
+                callback.call(self,JSON.parse(data));
             });
         }
 	});

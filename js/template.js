@@ -22,56 +22,72 @@
 	};
 
 	/**
-	 * Sets up defaults for all the Template methods such as a default template
-	 *
-	 * @constructor
+	 * 基本模板设置
 	 */
 	function Template() {
+		// 课程模板
 		this.courseTemplate
-		=	'<li data-id="{{id}}" class="{{completed}}">'
-		+		'<div class="view">'
-		+			'<input class="toggle" type="checkbox" {{checked}}>'
-		+			'<label>{{title}}</label>'
-		+			'<button class="destroy"></button>'
-		+		'</div>'
-		+	'</li>';
+		=	'<div class="m-course" data-index="{{index}}" data-id="{{id}}">\
+                <a href="##"><img src="{{middlePhotoUrl}}" alt="{{name}}"></a>\
+                <h5 class="f-toe"><a href="##">{{name}}</a></h5>\
+                <div class="course-author">\
+                    <a href="##">{{provider}}</a>\
+                    <div class="wrap"><div class="u-participate"><i></i>{{learnerCount}}</div></div>\
+                </div>\
+                <div class="course-price">￥800</div>\
+            </div>';
+
+        // 课程展开模板
+        this.courseExpandTemplate
+        = 	'<div class="course-wrap" data-id="{{id}}">\
+                <a href="##"><img src="{{middlePhotoUrl}}" alt="{{name}}"></a>\
+                <h5 class="f-toe"><a href="##">{{name}}</a></h5>\
+                <div class="u-participate"><i></i>{{learnerCount}}人在学</div>\
+                <div class="course-info">\
+                    <div>发布者：<span class="pulish">{{provider}}</span></div>\
+                    <div>分类：<span class="sort">{{categoryName}}</span></div>\
+                </div>\
+                <div class="course-details">\
+                    <p>{{description}}</p>\
+                </div>\
+            </div>';
 	}
 
 	/**
-	 * Creates an <li> HTML string and returns it for placement in your app.
+	 * 根据数据创建所有课程的html
 	 *
-	 * NOTE: In real life you should be using a templating engine such as Mustache
-	 * or Handlebars, however, this is a vanilla JS example.
-	 *
-	 * @param {object} data The object containing keys you want to find in the
-	 *                      template to replace.
-	 * @returns {string} HTML String of an <li> element
+	 * @param {object} data 传入的课程数据
+	 * @returns {string} HTML 
 	 *
 	 * @example
-	 * view.show({
-	 *	id: 1,
-	 *	title: "Hello World",
-	 *	completed: 0,
-	 * });
+	 * view.courseShow( [{"id":"967019",//课程 ID 
+		  "name":"和秋叶一起学职场技能",//课程名称 
+		  "bigPhotoUrl":"http://img1.ph.126.net/eg62.png",//课程大图 
+		  " middlePhotoUrl ":"http://img1.ph.126.net/eg62.png",//课程中图 
+		  "smallPhotoUrl":" http://img1.ph.126.net/eg62.png ",//课程小图 
+		  " provider ":"秋叶",//机构发布者 
+		  " learnerCount ":"23",//在学人数 
+		  " price ":"128",//课程价格，0为免费 
+		  "categoryName ":"办公技能",//课程分类 
+		  "description ":"适用人群：最适合即将实习、求职、就职的大学生，
+		入职一、二三年的新人。别以为那些职场老人都知道！"//课程描述 
+		}] );
 	 */
-	Template.prototype.show = function (data) {
+	Template.prototype.courseShow = function (data) {
 		var i, l;
 		var view = '';
 
 		for (i = 0, l = data.length; i < l; i++) {
-			var template = this.defaultTemplate;
-			var completed = '';
-			var checked = '';
+			var template = this.courseTemplate;
+			var learnerCount = data[i].learnerCount === '0'? ('￥'+data[i].learnerCount) : '免费';
 
-			if (data[i].completed) {
-				completed = 'completed';
-				checked = 'checked';
-			}
-
+			template = template.replace('{{index}}', i);
 			template = template.replace('{{id}}', data[i].id);
-			template = template.replace('{{title}}', escape(data[i].title));
-			template = template.replace('{{completed}}', completed);
-			template = template.replace('{{checked}}', checked);
+			template = template.replace('{{name}}', escape(data[i].name));
+			template = template.replace('{{middlePhotoUrl}}', data[i].middlePhotoUrl);
+			template = template.replace('{{provider}}', escape(data[i].provider));
+			template = template.replace('{{learnerCount}}', escape(data[i].learnerCount));
+			template = template.replace('{{price}}', escape(data[i].price));
 
 			view = view + template;
 		}
@@ -80,29 +96,24 @@
 	};
 
 	/**
-	 * Displays a counter of how many to dos are left to complete
+	 * 课程展开后的模板
 	 *
-	 * @param {number} activeTodos The number of active todos.
-	 * @returns {string} String containing the count
+	 * @param {number} id 当前需要展开的课程id
+	 * @param {object} data 当前需要展开的课程数据
+	 * @returns {string} HTML 返回的课程展开html
 	 */
-	Template.prototype.itemCounter = function (activeTodos) {
-		var plural = activeTodos === 1 ? '' : 's';
+	Template.prototype.itemCounter = function (id, data) {
+		var template = this.courseExpandTemplate;
 
-		return '<strong>' + activeTodos + '</strong> item' + plural + ' left';
-	};
+		template = template.replace('{{id}}', data[i].id);
+		template = template.replace('{{name}}', escape(data[i].name));
+		template = template.replace('{{middlePhotoUrl}}', data[i].middlePhotoUrl);
+		template = template.replace('{{provider}}', escape(data[i].provider));
+		template = template.replace('{{learnerCount}}', escape(data[i].learnerCount));
+		template = template.replace('{{categoryName}}', escape(data[i].categoryName));
+		template = template.replace('{{description}}', escape(data[i].description));
 
-	/**
-	 * Updates the text within the "Clear completed" button
-	 *
-	 * @param  {[type]} completedTodos The number of completed todos.
-	 * @returns {string} String containing the count
-	 */
-	Template.prototype.clearCompletedButton = function (completedTodos) {
-		if (completedTodos > 0) {
-			return 'Clear completed';
-		} else {
-			return '';
-		}
+		return template;
 	};
 
 	//          Exports
