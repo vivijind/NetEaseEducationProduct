@@ -97,6 +97,5 @@ var util = (function(){
         return this;
       }
     }
-
   }
 })()

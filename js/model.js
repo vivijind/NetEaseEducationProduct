@@ -4,23 +4,26 @@
 	/**
 	 * Model层
 	 */
-	function Model(cookie) {
-		this.cookie = cookie;
+	function Model(store) {
+		this.store = store;
 	}
 
 
 	_.extend(Model.prototype,{
 		/* 控制tips cookie */
 		displayTips: function(callback){
-			this.cookie.getCookie('tipsSuc',callback);
+			this.store.getCookie('tipsSuc',callback);
 		},
 		removeTips: function(){
-			this.cookie.setCookie('tipsSuc',1);
+			this.store.setCookie('tipsSuc',1);
 		},
 		/* 登陆cookie */
-		loginShow: function(){
-			this.cookie.getCookie('loginSuc', callback);
+		login: function(callback){
+			this.store.getCookie('loginSuc', callback);
 		},
+        loginSuccess: function(){
+
+        }
 	});
 
   	//          Exports
