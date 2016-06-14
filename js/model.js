@@ -11,25 +11,49 @@
 
 	_.extend(Model.prototype,{
 		/* 控制tips cookie */
-		displayTips: function(callback){
+		displayTips: function(callback) {
 			this.store.getCookie('tipsSuc',callback);
 		},
 		removeTips: function(){
 			this.store.setCookie('tipsSuc',1);
 		},
 		/* 登陆cookie */
-		login: function(callback){
+		getLogin: function(callback) {
 			this.store.getCookie('loginSuc', callback);
 		},
-        loginSuccess: function(){
-        	
+        getAttention: function(callback) {
+            this.store.getCookie('followSuc',callback);
         },
-        attention: function() {
-        	this.store.attention(function(attentioned) {
-        		if (attentioned) {
-        			this.store.setCookie('followSuc',1);
+        cancelAttention: function(callback) {
+            this.store.removeCookie('followSuc',callback);
+        },
+        loginSuccess: function(){
+        	this.store.setCookie('loginSuc',1);
+        },
+        login: function(userName,password,callback) {
+            this.store.login(userName,password,callback);
+        },
+        // 调用关注API，并设置关注成功cookie
+        attention: function(callback) {
+            var self = this;
+        	self.store.attention(function(attentioned) {
+        		if (attentioned === '1') {
+        			self.store.setCookie('followSuc',1);
+                    callback.call(self);
         		}
         	});
+        },
+        getCourse: function(pageNo,psize,type,callback) {
+            var self = this;
+            self.store.getCourse(pageNo,psize,type,function(data){
+                callback.call(self,JSON.parse(data));
+            });
+        },
+        getHotCourse: function() {
+            var self = this;
+            self.store.getHotCourse(function(data){
+                callback.call(self,JSON.parse(data))
+            });
         }
 	});
 

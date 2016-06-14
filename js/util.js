@@ -10,6 +10,16 @@ var util = (function(){
       } catch (e) {}
     },
 
+    $qsa: function( selector ){
+      return [].slice.call(document.querySelectorAll(selector))
+    },
+
+    $gt: function(selector, scope) {
+      if (document.querySelector && scope?scope.querySelector:true) try {
+          return [].slice.call(scope || document).getElementsByTagName(selector);
+      } catch (e) {}
+    },
+
     // 根据id获取元素
     $: function(id) {
       return document.getElementById(id);

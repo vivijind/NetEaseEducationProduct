@@ -3,8 +3,8 @@
 	 * 页面初始化
 	 */
 	function netEaseProduct() {
-		this.cookie = new Cookie();
-		this.model = new Model(this.cookie);
+		this.store = new Store();
+		this.model = new Model(this.store);
 		this.template = new Template();
 		this.view = new View(this.template);
 		this.controller = new Controller(this.model, this.view);

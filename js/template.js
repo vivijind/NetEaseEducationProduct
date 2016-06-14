@@ -27,7 +27,7 @@
 	 * @constructor
 	 */
 	function Template() {
-		this.defaultTemplate
+		this.courseTemplate
 		=	'<li data-id="{{id}}" class="{{completed}}">'
 		+		'<div class="view">'
 		+			'<input class="toggle" type="checkbox" {{checked}}>'
