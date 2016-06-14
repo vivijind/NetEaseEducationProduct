@@ -22,7 +22,14 @@
 			this.store.getCookie('loginSuc', callback);
 		},
         loginSuccess: function(){
-
+        	
+        },
+        attention: function() {
+        	this.store.attention(function(attentioned) {
+        		if (attentioned) {
+        			this.store.setCookie('followSuc',1);
+        		}
+        	});
         }
 	});
 
