@@ -35,21 +35,18 @@
                     <div class="wrap"><div class="u-participate"><i></i>{{learnerCount}}</div></div>\
                 </div>\
                 <div class="course-price">{{price}}</div>\
-            </div>';
-
-        // 课程展开模板
-        this.courseExpandTemplate
-        = 	'<div class="course-wrap" data-id="{{id}}">\
-                <a href="##"><img src="{{middlePhotoUrl}}" alt="{{name}}"></a>\
-                <h5 class="f-toe"><a href="##">{{name}}</a></h5>\
-                <div class="u-participate"><i></i>{{learnerCount}}人在学</div>\
-                <div class="course-info">\
-                    <div>发布者：<span class="pulish">{{provider}}</span></div>\
-                    <div>分类：<span class="sort">{{categoryName}}</span></div>\
-                </div>\
-                <div class="course-details">\
-                    <p>{{description}}</p>\
-                </div>\
+	                <div class="course-wrap f-dn" data-id="{{id}}">\
+	                <a href="##"><img src="{{middlePhotoUrl}}" alt="{{name}}"></a>\
+	                <h5 class="f-toe"><a href="##">{{name}}</a></h5>\
+	                <div class="u-participate"><i></i>{{learnerCount}}人在学</div>\
+	                <div class="course-info">\
+	                    <div>发布者：<span class="pulish">{{provider}}</span></div>\
+	                    <div>分类：<span class="sort">{{categoryName}}</span></div>\
+	                </div>\
+	                <div class="course-details">\
+	                    <p>{{description}}</p>\
+	                </div>\
+	            </div>\
             </div>';
 	}
 
@@ -88,32 +85,13 @@
 			template = template.replace(/{{provider}}/g, escape(data[i].provider));
 			template = template.replace(/{{learnerCount}}/g, escape(data[i].learnerCount));
 			template = template.replace(/{{price}}/g, price);
+			template = template.replace(/{{categoryName}}/g, escape(data[i].categoryName));
+			template = template.replace(/{{description}}/g, escape(data[i].description));
 
 			view = view + template;
 		}
 
 		return view;
-	};
-
-	/**
-	 * 课程展开后的模板
-	 *
-	 * @param {number} id 当前需要展开的课程id
-	 * @param {object} data 当前需要展开的课程数据
-	 * @returns {string} HTML 返回的课程展开html
-	 */
-	Template.prototype.courseExpand = function (data) {
-		var template = this.courseExpandTemplate;
-
-		template = template.replace(/{{id}}/g, data.id);
-		template = template.replace(/{{name}}/g, escape(data.name));
-		template = template.replace(/{{middlePhotoUrl}}/g, data.middlePhotoUrl);
-		template = template.replace(/{{provider}}/g, escape(data.provider));
-		template = template.replace(/{{learnerCount}}/g, escape(data.learnerCount));
-		template = template.replace(/{{categoryName}}/g, escape(data.categoryName));
-		template = template.replace(/{{description}}/g, escape(data.description));
-
-		return template;
 	};
 
 	//          Exports

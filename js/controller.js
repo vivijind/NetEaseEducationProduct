@@ -34,17 +34,13 @@
           self.concerndCancel();
         });
 
-        // self.view.bind('getCourseValue', function(pageNo,psize,type) {
-        //   self.updateCourse(pageNo,psize,type);
-        // });
+        self.view.bind('getCourseValue', function(pageNo,psize,type) {
+          self.updateCourse(pageNo,psize,type);
+        });
 
-        // self.view.bind('courseHover', function(index) {
-        //   self.expandCourse(index);
-        // });
-
-        // self.view.bind('courseOut', function() {
-        //   self.restoreCourse();
-        // });
+        self.view.bind('courseHover', function() {
+          self.expandCourse();
+        });
     	},
       /* /和view层事件绑定 */
 
@@ -80,10 +76,14 @@
           self._updateCursor(data.totalPage);
         });
       },
-      expandCourse: function(index) {
+      expandCourse: function() {
         var self = this;
-        self.model.getData(function(data){
-          self.view.render('expandCourse',data.list[index]);
+        self.model.getData(function(){
+          self.view.render('expandCourse');
+          // 只有在课程展开后，才有mouseleave事件
+          self.view.bind('courseOut', function() {
+            self.restoreCourse();
+          });
         });
       },
       restoreCourse: function() {

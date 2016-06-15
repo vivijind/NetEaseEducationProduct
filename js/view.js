@@ -35,7 +35,7 @@
 
         // 课程列表
         this.$courseLst = _.$qs('.g-mn .lst');
-        this.$
+        this.$curCourseWrap = null;
 
         // 浏览器宽度
         this.width = document.body.clientWidth;
@@ -66,16 +66,11 @@
         _updateCourse: function(data) {
             this.$courseLst.innerHTML = this.courseShow(data);
         },
-        _itemIndex: function (element) {
-            this.$curCourse = element;
-            this.originHTML = element.innerHTML;
-            return parseInt(element.dataset.index);
-        },
-        _expandCourse: function(data) {
-            this.$curCourse.innerHTML = this.courseExpand(data);
+        _expandCourse: function() {
+            _.delClass(this.$curCourseWrap,'f-dn');
         },
         _restoreCourse: function() {
-            this.$curCourse.innerHTML = this.originHTML;
+            _.addClass(this.$curCourseWrap,'f-dn');
         }
     });
 
@@ -106,11 +101,16 @@
                     self._getCourseValue(handler);
                 });
             } else if (event === 'courseHover') {
-                _.delegateByClass(self.$courseLst, '.m-course', 'mouseover', function(){
-                    handler(self._itemIndex(this));
+                // _.delegateByClass(self.$courseLst, '.m-course', 'mouseover', function(){
+                //     self.$curCourseWrap = _.$qs('.course-wrap',this);
+                //     handler();
+                // });
+                _.addEvent(_.$qs('.m-course'),'mouseover',function(){
+                    self.$curCourseWrap = this;
+                    handler();
                 });
             } else if (event === 'courseOut') {
-                _.delegateByClass(self.$courseLst, '.m-course .course-wrap', 'mouseover', function(){
+                _.addEvent(self.$curCourseWrap, 'mouseout', function(){
                     handler();
                 });
             } else if (event === 'getCourseValue') {
@@ -167,7 +167,7 @@
                     self._updateCourse(parameter);
                 },
                 expandCourse: function() {
-                    self._expandCourse(parameter);
+                    self._expandCourse();
                 },
                 restoreCourse: function() {
                     self._restoreCourse();
