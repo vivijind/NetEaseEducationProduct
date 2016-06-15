@@ -16,7 +16,7 @@ var util = (function(){
 
     $gt: function(selector, scope) {
       if (document.querySelector && scope?scope.querySelector:true) try {
-          return [].slice.call(scope || document).getElementsByTagName(selector);
+          return [].slice.call((scope || document).getElementsByTagName(selector));
       } catch (e) {}
     },
 

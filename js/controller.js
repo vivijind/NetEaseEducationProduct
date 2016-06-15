@@ -38,8 +38,12 @@
           self.updateCourse(pageNo,psize,type);
         });
 
-        self.view.bind('courseHover', function() {
-          self.expandCourse();
+        self.view.bind('tabChange', function(pageNo,psize,type) {
+          self.tabChange(pageNo,psize,type);
+        });
+
+        self.view.bind('resize', function(pageNo,psize,type) {
+          self.updateCourse(pageNo,psize,type);
         });
     	},
       /* /和view层事件绑定 */
@@ -76,19 +80,11 @@
           self._updateCursor(data.totalPage);
         });
       },
-      expandCourse: function() {
+      tabChange: function(pageNo,psize,type) {
         var self = this;
-        self.model.getData(function(){
-          self.view.render('expandCourse');
-          // 只有在课程展开后，才有mouseleave事件
-          self.view.bind('courseOut', function() {
-            self.restoreCourse();
-          });
-        });
+        self.view.render('tabChange');
+        self.updateCourse(pageNo,psize,type);
       },
-      restoreCourse: function() {
-        this.view.render('restoreCourse');
-      }
     });
 
     // 私有事件

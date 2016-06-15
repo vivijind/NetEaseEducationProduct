@@ -34,8 +34,8 @@
                     <a href="##">{{provider}}</a>\
                     <div class="wrap"><div class="u-participate"><i></i>{{learnerCount}}</div></div>\
                 </div>\
-                <div class="course-price">{{price}}</div>\
-	                <div class="course-wrap f-dn" data-id="{{id}}">\
+            	<div class="course-price">{{price}}</div>\
+                <div class="course-wrap f-dn" data-id="{{id}}">\
 	                <a href="##"><img src="{{middlePhotoUrl}}" alt="{{name}}"></a>\
 	                <h5 class="f-toe"><a href="##">{{name}}</a></h5>\
 	                <div class="u-participate"><i></i>{{learnerCount}}人在学</div>\

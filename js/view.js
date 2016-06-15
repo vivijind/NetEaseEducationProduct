@@ -26,7 +26,6 @@
         // tab
         this.$tab = _.$qs('.g-mn .tab');
         this.$tabs = _.$gt('li',this.$tab);
-        this.$tabSel = _.$qs('.sel',this.$tab);
 
         // cursor
         this.$cursor = _.$qs('.m-cursor');
@@ -35,12 +34,11 @@
 
         // 课程列表
         this.$courseLst = _.$qs('.g-mn .lst');
-        this.$curCourseWrap = null;
 
         // 浏览器宽度
         this.width = document.body.clientWidth;
         this.pageNo = parseInt(this.$cursorCrt.innerHTML) || 1;
-        this.type = this.$tabSel.value || 10;
+        this.type = 10;
     }
 
     // 事件注册
@@ -58,7 +56,6 @@
             } else {
                 pageNo = parseInt(this.$cursorCrt.innerHTML) || 1;
             }
-            this.type = this.$tabSel.value || 10;
             this.pageNo = pageNo;
 
             handler(pageNo,psize,this.type);
@@ -66,12 +63,6 @@
         _updateCourse: function(data) {
             this.$courseLst.innerHTML = this.courseShow(data);
         },
-        _expandCourse: function() {
-            _.delClass(this.$curCourseWrap,'f-dn');
-        },
-        _restoreCourse: function() {
-            _.addClass(this.$curCourseWrap,'f-dn');
-        }
     });
 
     // 对外暴露的接口
@@ -91,30 +82,22 @@
                     handler();
                 });
             } else if (event === 'tabChange') {
-                _.delegateEvent(self.$nav, 'li', function(){
-                    self.$tabSel = this;
+                _.delegateEvent(self.$tab, 'li', 'click', function(){
+                    self.type = this.value;
                     self._getCourseValue(handler);
                 });
             } else if (event === 'cursorChange') {
-                _.delegateEvent(self.$cursor, 'li', function(){
+                _.delegateEvent(self.$cursor, 'li', 'click', function(){
                     self.$cursorCrt = this;
                     self._getCourseValue(handler);
                 });
-            } else if (event === 'courseHover') {
-                // _.delegateByClass(self.$courseLst, '.m-course', 'mouseover', function(){
-                //     self.$curCourseWrap = _.$qs('.course-wrap',this);
-                //     handler();
-                // });
-                _.addEvent(_.$qs('.m-course'),'mouseover',function(){
-                    self.$curCourseWrap = this;
-                    handler();
-                });
-            } else if (event === 'courseOut') {
-                _.addEvent(self.$curCourseWrap, 'mouseout', function(){
-                    handler();
-                });
             } else if (event === 'getCourseValue') {
                 self._getCourseValue(handler);
+            } else if (event === 'resize') {
+                window.onresize = function() {
+                    self.width = document.body.clientWidth;
+                    self._getCourseValue(handler);
+                }
             }
         },
         render: function (viewCmd, parameter) {
@@ -144,33 +127,25 @@
                     self.$navFansNum.innerHTML = fansNum;
                 },
                 tabChange: function() {
-                    tabs.forEach(function(tab, index) {
-                        if (tab.value === this.type) {
+                    self.$tabs.forEach(function(tab, index) {
+                        if (tab.value === self.type) {
                             _.addClass(tab,'sel');
                         } else {
                             _.delClass(tab,'sel');
                         }
                     });
-                    self._updateCourse(parameter);
                 },
                 cursorChange: function() {
-                    cursors.forEach(function(cursor, index) {
+                    self.$cursors.forEach(function(cursor, index) {
                         if (parseInt(cursor.innerHTML) === this.pageNo) {
                             _.addClass(cursor,'crt');
                         } else {
                             _.delClass(cursor,'crt');
                         }
                     });
-                    self._updateCourse(parameter);
                 },
                 updateCourse: function() {
                     self._updateCourse(parameter);
-                },
-                expandCourse: function() {
-                    self._expandCourse();
-                },
-                restoreCourse: function() {
-                    self._restoreCourse();
                 }
             };
 
