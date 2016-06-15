@@ -6,6 +6,7 @@
 	 */
 	function Model(store) {
 		this.store = store;
+        this.data = {};
 	}
 
 
@@ -46,8 +47,12 @@
         getCourse: function(pageNo,psize,type,callback) {
             var self = this;
             self.store.getCourse(pageNo,psize,type,function(data){
-                callback.call(self,JSON.parse(data));
+                self.data = JSON.parse(data);
+                callback.call(self,self.data);
             });
+        },
+        getData: function(callback) {
+            callback.call(this,this.data); 
         },
         getHotCourse: function() {
             var self = this;

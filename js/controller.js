@@ -33,6 +33,18 @@
         self.view.bind('concerndCancel',function(){
           self.concerndCancel();
         });
+
+        // self.view.bind('getCourseValue', function(pageNo,psize,type) {
+        //   self.updateCourse(pageNo,psize,type);
+        // });
+
+        // self.view.bind('courseHover', function(index) {
+        //   self.expandCourse(index);
+        // });
+
+        // self.view.bind('courseOut', function() {
+        //   self.restoreCourse();
+        // });
     	},
       /* /和view层事件绑定 */
 
@@ -61,12 +73,21 @@
           self.view.render('concerndCancel');
         });
       },
-      updateCourse: function() {
+      updateCourse: function(pageNo,psize,type) {
         var self = this;
-        self.model.getCourse(function(data){
+        self.model.getCourse(pageNo,psize,type,function(data){
           self._updateCourse(data.list);
           self._updateCursor(data.totalPage);
         });
+      },
+      expandCourse: function(index) {
+        var self = this;
+        self.model.getData(function(data){
+          self.view.render('expandCourse',data.list[index]);
+        });
+      },
+      restoreCourse: function() {
+        this.view.render('restoreCourse');
       }
     });
 
@@ -136,7 +157,7 @@
         this._concernShow(false);
       },
       _updateCourse: function(courseList) {
-        self.view.render('updateCourse', courseList);
+        this.view.render('updateCourse', courseList);
       },
       _updateCursor: function(totalPage) {
         

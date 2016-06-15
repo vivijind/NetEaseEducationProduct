@@ -1,4 +1,4 @@
-(function (_) {
+(function () {
 	var htmlEscapes = {
 		'&': '&amp;',
 		'<': '&lt;',
@@ -34,7 +34,7 @@
                     <a href="##">{{provider}}</a>\
                     <div class="wrap"><div class="u-participate"><i></i>{{learnerCount}}</div></div>\
                 </div>\
-                <div class="course-price">￥800</div>\
+                <div class="course-price">{{price}}</div>\
             </div>';
 
         // 课程展开模板
@@ -79,15 +79,15 @@
 
 		for (i = 0, l = data.length; i < l; i++) {
 			var template = this.courseTemplate;
-			var learnerCount = data[i].learnerCount === '0'? ('￥'+data[i].learnerCount) : '免费';
+			var price = data[i].learnerCount === '0'? '免费' : ('￥'+data[i].learnerCount);
 
-			template = template.replace('{{index}}', i);
-			template = template.replace('{{id}}', data[i].id);
-			template = template.replace('{{name}}', escape(data[i].name));
-			template = template.replace('{{middlePhotoUrl}}', data[i].middlePhotoUrl);
-			template = template.replace('{{provider}}', escape(data[i].provider));
-			template = template.replace('{{learnerCount}}', escape(data[i].learnerCount));
-			template = template.replace('{{price}}', escape(data[i].price));
+			template = template.replace(/{{index}}/g , i);
+			template = template.replace(/{{id}}/g, data[i].id);
+			template = template.replace(/{{name}}/g, escape(data[i].name));
+			template = template.replace(/{{middlePhotoUrl}}/g, data[i].middlePhotoUrl);
+			template = template.replace(/{{provider}}/g, escape(data[i].provider));
+			template = template.replace(/{{learnerCount}}/g, escape(data[i].learnerCount));
+			template = template.replace(/{{price}}/g, price);
 
 			view = view + template;
 		}
@@ -102,16 +102,16 @@
 	 * @param {object} data 当前需要展开的课程数据
 	 * @returns {string} HTML 返回的课程展开html
 	 */
-	Template.prototype.itemCounter = function (id, data) {
+	Template.prototype.courseExpand = function (data) {
 		var template = this.courseExpandTemplate;
 
-		template = template.replace('{{id}}', data[i].id);
-		template = template.replace('{{name}}', escape(data[i].name));
-		template = template.replace('{{middlePhotoUrl}}', data[i].middlePhotoUrl);
-		template = template.replace('{{provider}}', escape(data[i].provider));
-		template = template.replace('{{learnerCount}}', escape(data[i].learnerCount));
-		template = template.replace('{{categoryName}}', escape(data[i].categoryName));
-		template = template.replace('{{description}}', escape(data[i].description));
+		template = template.replace(/{{id}}/g, data.id);
+		template = template.replace(/{{name}}/g, escape(data.name));
+		template = template.replace(/{{middlePhotoUrl}}/g, data.middlePhotoUrl);
+		template = template.replace(/{{provider}}/g, escape(data.provider));
+		template = template.replace(/{{learnerCount}}/g, escape(data.learnerCount));
+		template = template.replace(/{{categoryName}}/g, escape(data.categoryName));
+		template = template.replace(/{{description}}/g, escape(data.description));
 
 		return template;
 	};
@@ -131,4 +131,4 @@
  	   // 直接暴露到全局
  	   window.Template = Template;
   	}
-})(util);
+})();

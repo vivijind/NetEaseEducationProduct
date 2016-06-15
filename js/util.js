@@ -42,6 +42,24 @@ var util = (function(){
         });
     },
 
+    delegateByClass: function (target, selector, type, handler) {
+      var self = this;
+      function dispatchEvent(event) {
+        var targetElement = event.target;
+        var potentialElements = self.$qsa(selector, target);
+        var hasMatch = Array.prototype.indexOf.call(potentialElements, targetElement) >= 0;
+
+        if (hasMatch) {
+          handler.call(targetElement, event);
+        }
+      }
+
+      // https://developer.mozilla.org/en-US/docs/Web/Events/blur
+      var useCapture = type === 'blur' || type === 'focus';
+
+      self.addEvent(target, type, dispatchEvent, useCapture);
+    },
+
     // 拷贝
     extend: function(o1, o2){
       for(var i in o2) if (o1[i] == undefined ) {
