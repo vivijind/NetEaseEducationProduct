@@ -61,8 +61,6 @@
 		show: function() {
 			// 给html的body节点增加整个窗体节点
 			document.body.appendChild(this.container);
-			// 动画
-			animateClass(this.wrap, this.animation.enter);
 			// 去除消息显示
 			this.message.style.display = "none";
 		},
@@ -70,33 +68,33 @@
 		// Modal hide接口
 		hide: function() {
 			var container = this.container;
-
-			// 动画
-			animateClass(this.wrap, this.animation.leave, function(){
-		        document.body.removeChild(container);
-		      });
+			document.body.removeChild(container);
 		},
 
 		// 内部接口
 		// 确认
 		_onLogin: function() {
+			var self = this;
 			var event = arguments[0] || window.event;
 			event.preventDefault();
 
 			// 验证登录密码
-			var userName = this.name.value;
-			var passWord = this.password.value;
+			var userName = self.name.value;
+			var passWord = self.password.value;
 
-			if (this._valid(userName,password)) {
-				if (this.emit("login",userName,passWord)) {
-					this.message.innerHTML = "登录成功！";
-					this.message.style.color = "#0f0";
-					this.message.style.display = "block";
-					this.hide();
-				} else {
-					this.message.innerHTML = "登录失败，用户名或密码错误！";
-					this.message.style.display = "block";
-				}
+			if (self._valid(userName,passWord)) {
+				self.emit("login",userName,passWord,function(success) {
+					if (success) {
+						self.message.innerHTML = "登录成功！";
+						self.message.style.color = "#0f0";
+						self.message.style.display = "block";
+						self.hide();
+					} else {
+						self.message.innerHTML = "登录失败，用户名或密码错误！";
+						self.message.style.display = "block";
+					}
+				});
+				
 			}
 		},
 
@@ -104,6 +102,11 @@
 		_onCancel: function() {
 			this.emit("cancel");
 			this.hide();
+		},
+
+		_focus: function() {
+			// 去除消息显示
+			this.message.style.display = "none";
 		},
 
 		_valid: function(userName,passWord) {
@@ -125,6 +128,9 @@
 
 		// 事件初始化
 		_initEvent: function() {
+			// focus事件
+			_.addEvent(this.name, 'focus',this._focus.bind(this));
+			_.addEvent(this.password, 'focus',this._focus.bind(this));
 			// 取消
 			_.addEvent(this.close, 'click',this._onCancel.bind(this));
 			// 登录验证

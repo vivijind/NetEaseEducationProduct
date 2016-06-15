@@ -182,3 +182,4 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .m-modal .modal_body input+input{margin-top:15px;}
 .m-modal .modal_foot{margin-top:29px;}
 .m-modal .modal_foot .login{width:293px;height:46px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;}
+.m-modal .modal_message{display:none;}

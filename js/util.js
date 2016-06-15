@@ -33,7 +33,7 @@ var util = (function(){
 
     // 事件代理
     delegateEvent: function(element, tag, eventName, listener) {
-        addEvent(element, eventName, function () {
+        this.addEvent(element, eventName, function () {
             var event = arguments[0] || window.event,
                 target = event.target || event.srcElement;
             if (target && target.tagName === tag.toUpperCase()) {

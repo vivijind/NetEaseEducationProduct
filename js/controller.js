@@ -92,22 +92,13 @@
       _loginShow: function(login) {
         var self = this;
         if (!login) {  // 未设置登录cookie，需要登录，弹出登录框
-          var modal = new Modal({
-              // 1.内容配置
-              content: "内容",
-              // 2.动画设置
-              animation: {
-                  enter: 'fadeIn',
-                  leave: 'fadeOut'
-              },
-              
-              // 移动及拖拽
-              drag: true
-          });
+          var modal = new Modal();
 
           // 注册事件
-          modal.on("confirm", function(userName,password){
-              self._login(userName,password);
+          modal.on("login", function(userName,password,callback){
+              self._login(userName,password,function(value){
+                callback(value);
+              });
           });
           modal.on("cancel", function(){
               self._loginFailed();
@@ -126,13 +117,15 @@
             self.view.render('concern',concerned);
         });
       },
-      _login: function(userName,password) {
+      _login: function(userName,password,callback) {
         var self = this;
         self.model.login(userName,password,function(isLogin){
           if (isLogin === '1') {
             self._loginSucess();
+            callback(true);
           } else {
             self._loginFailed();
+            callback(false);
           }
         });
       },

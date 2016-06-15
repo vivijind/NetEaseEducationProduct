@@ -137,7 +137,7 @@
         // 用户登陆
         login: function(userName,password,callback) {
             var url = 'http://study.163.com/webDev/login.htm';
-            var options =  {userName: hex_md5('studyOnline'), password: hex_md5('study.163.com')};
+            var options =  {userName: hex_md5(userName), password: hex_md5(password)};
             this.ajax.get(url, options, callback);
         },
         // 右侧“机构介绍”视频 

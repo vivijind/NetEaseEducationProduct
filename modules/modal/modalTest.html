@@ -20,7 +20,6 @@
 
     <script type="text/javascript" src="util.js"></script>
     <script type="text/javascript" src="modal.js"></script>
-    <script type="text/javascript" src="animate.js"></script>
     <script type="text/javascript">
         /*
         流程：
@@ -31,18 +30,7 @@
 完善：遍历接口、插件封装、重构等。
          */
         // 定义公共接口
-        var modal = new Modal({
-            // 1.内容配置
-            content: "内容",
-            // 2.动画设置
-            animation: {
-                enter: 'fadeIn',
-                leave: 'fadeOut'
-            },
-            
-            // 移动及拖拽
-            drag: true
-        });
+        var modal = new Modal();
 
         // 注册事件
         modal.on("login", function(){
