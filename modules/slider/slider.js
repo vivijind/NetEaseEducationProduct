@@ -109,10 +109,9 @@
       this.slider.style.transitionDuration = '.5s';
 
       this._calcSlide();
-
     },
     // 执行
-    _calcSlide() {
+    _calcSlide: function() {
       var pageIndex = this.pageIndex = this._getNum(this.pageIndex, this.pageNum);
       var slideIndex = this.slideIndex = this._getNum(this.slideIndex,3);
       var prevslideIndex = this._getNum(this.slideIndex-1,3);
@@ -136,26 +135,33 @@
       this._onNav(this.pageIndex, this.slideIndex);
     },
     // getNum index标准化
-    _getNum(index, len) {
+    _getNum: function(index, len) {
       return (index + len)%len;
     },
     // 标准化下标
     _normIndex: function(index, len){
       return (len + index) % len;
     },
-    _onNav(pageIndex, slideIndex) {
+    _onNav: function(pageIndex, slideIndex) {
+      var imgLinkList = this.links;
       var imgList = this.images;
       var slides = this.slides;
 
       // 图片下标和slide下标由0开始
       for(var i = -1; i <= 1; i ++) {
         var index = this._getNum((slideIndex+i),3);
-        var img = slides[index].querySelector("img"); // 当前img结点
+        var imglink = slides[index].querySelector("a"),   // 当前链接结点
+            img = slides[index].querySelector("img");     // 当前img结点
         if(!img) {
+          imglink = document.createElement("a");
           img = document.createElement("img");
-          slides[index].appendChild(img);
+          imglink.appendChild(img);
+          slides[index].appendChild(imglink);
         }
-        img.src = imgList[this._getNum((pageIndex+i),this.pageNum)];
+        var index = this._getNum((pageIndex+i),this.pageNum);
+        imglink.href = imgLinkList[index];
+        imglink.target = "_blank";
+        img.src = imgList[index];
       }
 
       // 触发nav事件
@@ -163,7 +169,7 @@
     },
 
     // 拖拽
-    _initDrag() {
+    _initDrag: function() {
       // 拖拽初始化
       this._dragInfo = {};
       this.slider.addEventListener("mousedown", this._dragstart.bind(this));
@@ -172,12 +178,12 @@
       this.slider.addEventListener("mouseleave", this._dragend.bind(this));
     },
 
-    _dragstart(ev) {
+    _dragstart: function(ev) {
       var dragInfo = this._dragInfo;
       dragInfo.start = {x: ev.pageX, y: ev.pageY};
     },
 
-    _dragmove(ev) {
+    _dragmove: function(ev) {
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 

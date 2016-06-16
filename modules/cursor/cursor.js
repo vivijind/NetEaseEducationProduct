@@ -84,7 +84,7 @@
 			this._update(index);
 		},
 
-		select: function() {
+		_select: function() {
 			var target = _.getTarget(event);
 			var index = target.dataset.index;
 			if (index === "more") {
@@ -95,11 +95,13 @@
 				this.doNext();
 			} else {
 				index = parseInt(index);
-				this._update(index);
+				this.update(index);
+				// 触发select事件
+            	this.emit('select',this.cursorData[index],index);
 			}
 		},
 
-		_update: function(selIndex) {
+		update: function(selIndex) {
 			this.crtIndex = selIndex;
 			var dataNum = this.dataNum,
 				cursorNum = this.cursorNum,
@@ -107,11 +109,11 @@
 				needUpdate = false;
 
 			// 当前选中项为第一项和最后一项时，prev/next不可用
-			_.delClass(this.prev,'disabled');
-			_.delClass(this.next,'disabled');
-			if (selIndex === 0) {
+			this.prev && _.delClass(this.prev,'disabled');
+			this.prev && _.delClass(this.next,'disabled');
+			if (this.prev && selIndex === 0) {
 				_.addClass(this.prev,'disabled');
-			} else if (selIndex === this.dataNum-1) {
+			} else if (this.next && selIndex === this.dataNum-1) {
 				_.addClass(this.next,'disabled');
 			}
 
@@ -154,8 +156,6 @@
 					_.addClass(cursor,'crt');
 				}
 			}
-            // 触发select事件
-            this.emit('select',this.cursorData[selIndex]);
 		},
 
 		_init: function() {
@@ -167,7 +167,7 @@
 			if (this.cursorData) {
 				var length = this.cursorData.length;
 				var showNum = this.cursorNum;
-				for (var i = 0; i < length && i < (showNum-1); i++) {
+				for (var i = 0; i < length-1 && i < (showNum-1); i++) {
 					if (i === 0) {
 						template += "<li class='cursor crt' data-index='"+ i +"'>" + this.cursorData[i] + "</li>";
 					} else if (length > showNum && i === (showNum-2)) {
@@ -187,7 +187,7 @@
 		// 事件初始化
 		_initEvent: function() {
 			// 使用事件代理绑定click事件
-	        _.delegateEvent(this.cursorNode, 'li', 'click', this.select.bind(this));
+	        _.delegateEvent(this.cursorNode, 'li', 'click', this._select.bind(this));
 		}
 	});
 

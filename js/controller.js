@@ -193,6 +193,12 @@
                 "img/banner2.jpg",
                 "img/banner3.jpg"
             ],
+            // 图片对应的链接列表
+            links: [
+                "http://open.163.com/",
+                "http://study.163.com/",
+                "http://www.icourse163.org/"
+            ],
 
             // 是否允许拖拽
             drag: true,
@@ -207,6 +213,15 @@
             cursorData: ['','','']
         });
 
+        pointer.on("select",function(value,index){
+            slider.nav(index);
+        });
+        
+        // 每次slider图片位置变化，cursor也变化，增加监听处理
+        slider.on('nav', function( ev ) {
+            var pageIndex = ev.pageIndex;
+            pointer.update(pageIndex);
+        });
 
         // 设置当前初始显示页
         slider.nav(0);
