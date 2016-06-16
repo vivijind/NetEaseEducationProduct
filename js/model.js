@@ -52,7 +52,7 @@
                 this.pageNo = pageNo;
             }
             if (psize) {
-                this.pageNo = psize;
+                this.psize = psize;
             }
             if (type) {
                 this.type = type;

@@ -87,8 +87,6 @@
                     self.width = document.body.clientWidth;
                     self._getCourseValue(handler);
                 }
-            } else if (event === "updateCursor") {
-                handler();
             }
         },
         render: function (viewCmd, parameter) {
@@ -128,6 +126,9 @@
                 },
                 updateCourse: function() {
                     self._updateCourse(parameter);
+                },
+                updateCursor: function() {
+                    parameter.show(self.$cursor);
                 }
             };
 

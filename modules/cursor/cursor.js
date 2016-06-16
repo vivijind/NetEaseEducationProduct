@@ -3,9 +3,9 @@
 	// Cursor 主体html模板
 	var template = 
 	"<ul class='m-cursor'>\
-			<li class='prev'>&lt;</li>\
+			<li class='prev'><</li>\
 			<li class='cursor crt'>1</li>\
-			<li class='next'>&gt;</li>\
+			<li class='next'>></li>\
 		</ul>";
 
 	// Cursor 实现
@@ -21,7 +21,7 @@
 	    this.cursorNode = this._layout.cloneNode(true);
 
 	    // 根据数据初始化指示器
-	    if (!options) {
+	    if (options.cursorData) {
 	    	this._init();
 	    }
 
@@ -60,16 +60,16 @@
 			this.container = container || this.container;
 			// 初始化，给外部容器增加指示器组件
     		this.container.appendChild(this.cursorNode);
-		}
+		},
 
 		// 前一个
 		doPrev: function() {
-			var index = this.crtIndex === 1? 1:(this.crtIndex-1)/this.allCursor;
+			var index = this.crtIndex <= 1? 1:(this.crtIndex-1+this.allCursor)%this.allCursor;
 			this.select(index);
 		},
 
 		doNext: function() {
-			var index = (this.crtIndex+1)/this.allCursor;
+			var index = (this.crtIndex+1+this.allCursor)%this.allCursor;
 			this.select(index);
 		},
 
@@ -83,26 +83,26 @@
                 }
             });
             // 触发select事件
-            this.emit('select',this.cursorData[index-1]);
+            this.emit('select',this.cursorData[selIndex]);
 		},
 
 		_init: function() {
 			var template = "";
 			// 根据数据构建指示器
 			if (this.prevData) {
-				template += "<li class='prev'>" + this.prev + "</li>";
+				template += "<li class='prev'>" + this.prevData + "</li>";
 			}
 			if (this.cursorData) {
 				for (var i = 0; i < this.cursorData.length; i++) {
 					if (i === 0) {
-						template += "<li class='prev crt'>" + this.cursorData[i] + "</li>";
+						template += "<li class='cursor crt'>" + this.cursorData[i] + "</li>";
 					} else {
-						template += "<li class='prev'>" + this.cursorData[i] + "</li>";
+						template += "<li class='cursor'>" + this.cursorData[i] + "</li>";
 					}
 				}
 			}
 			if (this.nextData) {
-				template += "<li class='next'>" + this.next + "</li>";
+				template += "<li class='next'>" + this.nextData + "</li>";
 			}
 			this.cursorNode.innerHTML = template;
 		},
@@ -111,17 +111,17 @@
 		_initEvent: function() {
 			var self = this;
 			// 给每个序号绑定click事件，点击定位到对应轮播图片位置
-	        for (var i = 0,cursor; cursor = self.cursors[i]; i++) {
+	        self.cursors.forEach(function(cursor,index) {
 	        	_.addEvent(cursor,'click',function() {
-	                self.select(index);
-	            });
-	        }
+	        		self.select.call(self,index);
+	        	});
+	        });
 	        // prev及next
 	        if (self.prevData) {
-				_.addEvent(self.prev, 'click',self.doPrev);
+				_.addEvent(self.prev, 'click',self.doPrev.bind(self));
 			}
 	        if (self.nextData) {
-	        	_.addEvent(self.next, 'click',self.doNext);
+	        	_.addEvent(self.next, 'click',self.doNext.bind(self));
 	        }
 		}
 	});

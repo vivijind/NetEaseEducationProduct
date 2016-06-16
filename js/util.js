@@ -12,7 +12,7 @@ var util = (function(){
 
     $qsa: function( selector, scope ){
       if (document.querySelectorAll && scope?scope.querySelectorAll:true) try {
-          return (scope || document).querySelectorAll(selector);
+          return [].slice.call((scope || document).querySelectorAll(selector));
       } catch (e) {}
     },
 

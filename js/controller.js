@@ -5,7 +5,6 @@
   	function Controller(model, view) {
   		this.model = model;
   		this.view = view;
-      this.cursor = new Cursor();
 
   		this.init();	
   	}
@@ -37,6 +36,7 @@
 
         self.view.bind('getCourseValue', function(pageNo,psize,type) {
           self.model.setCourse(pageNo,psize,type);
+          self.updateCourse(self._updateCursor);
         });
 
         self.view.bind('tabChange', function(pageNo,psize,type) {
@@ -46,11 +46,7 @@
 
         self.view.bind('resize', function(pageNo,psize,type) {
           self.model.setCourse(pageNo,psize,type);
-          self.updateCourse();
-        });
-
-        self.view.bind('updateCursor', function() {
-            self.updateCursor();
+          self.updateCourse(self._updateCursor);
         });
     	},
       /* /和view层事件绑定 */
@@ -87,7 +83,7 @@
           self._updateCourse(data.list);
           // 执行回调
           callback = callback || function () {};
-          callback();
+          callback.call(self);
         });
       },
       tabChange: function() {
@@ -96,9 +92,6 @@
         self.updateCourse(function() {
           this._updateCursor();
         });
-      },
-      updateCursor: function() {
-        this._updateCursor();
       }
     });
 
@@ -163,7 +156,7 @@
       _updateCourse: function(courseList) {
         this.view.render('updateCourse', courseList);
       },
-      _updateCursor: function(container) {
+      _updateCursor: function() {
         var self = this;
         var pageSum = self.model.getAllPage();
         if (!pageSum) {
@@ -175,8 +168,6 @@
         }
         // cursor组件
         var cursor = new Cursor({
-            // 给定视口
-            container: container,
             // 指示器
             prevData: "<",
             nextData: ">",
@@ -187,6 +178,9 @@
           self.model.setCourse(pageNo);
           self.updateCourse();
         });
+
+        // 显示
+        self.view.render('updateCursor',cursor);
       }
     });
 
