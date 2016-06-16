@@ -7,6 +7,9 @@
 	function Model(store) {
 		this.store = store;
         this.data = {};
+        this.pageNo = 1;
+        this.psize = 20;
+        this.type = 10;
 	}
 
 
@@ -44,15 +47,27 @@
         		}
         	});
         },
-        getCourse: function(pageNo,psize,type,callback) {
+        setCourse: function(pageNo,psize,type) {
+            if (pageNo) {
+                this.pageNo = pageNo;
+            }
+            if (psize) {
+                this.pageNo = psize;
+            }
+            if (type) {
+                this.type = type;
+            }
+        },
+        getCourse: function(callback) {
             var self = this;
-            self.store.getCourse(pageNo,psize,type,function(data){
+            self.store.getCourse(self.pageNo,self.psize,self.type,function(data){
                 self.data = JSON.parse(data);
                 callback.call(self,self.data);
             });
         },
-        getData: function(callback) {
-            callback.call(this,this.data); 
+        // 获得数据总页数
+        getAllPage: function() {
+            return this.data['totalPage']; 
         },
         getHotCourse: function() {
             var self = this;

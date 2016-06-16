@@ -10,8 +10,10 @@ var util = (function(){
       } catch (e) {}
     },
 
-    $qsa: function( selector ){
-      return [].slice.call(document.querySelectorAll(selector))
+    $qsa: function( selector, scope ){
+      if (document.querySelectorAll && scope?scope.querySelectorAll:true) try {
+          return (scope || document).querySelectorAll(selector);
+      } catch (e) {}
     },
 
     $gt: function(selector, scope) {

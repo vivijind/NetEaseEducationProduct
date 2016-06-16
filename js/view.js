@@ -28,16 +28,14 @@
         this.$tabs = _.$gt('li',this.$tab);
 
         // cursor
-        this.$cursor = _.$qs('.m-cursor');
-        this.$cursors = _.$qsa('.m-cursor .cursor');
-        this.$cursorCrt = _.$qs('.crt',this.$cursor);
+        this.$cursor = _.$qs('.g-mn .cursor');
 
         // 课程列表
         this.$courseLst = _.$qs('.g-mn .lst');
 
+
         // 浏览器宽度
         this.width = document.body.clientWidth;
-        this.pageNo = parseInt(this.$cursorCrt.innerHTML) || 1;
         this.type = 10;
     }
 
@@ -48,16 +46,7 @@
     _.extend(View.prototype, {
         _getCourseValue: function(handler) {
             var psize = this.width>= 1205? 20 : 15;
-            var pageNo = this.pageNo;
-            if (this.$cursorCrt.innerHTML === '<') {
-                pageNo = pageNo-1>0 ? pageNo-1:1;
-            } else if (this.$cursorCrt.innerHTML === '>') {
-                pageNo = pageNo+1<9 ? pageNo+1:1;
-            } else {
-                pageNo = parseInt(this.$cursorCrt.innerHTML) || 1;
-            }
-            this.pageNo = pageNo;
-
+            var pageNo = 1;
             handler(pageNo,psize,this.type);
         },
         _updateCourse: function(data) {
@@ -98,6 +87,8 @@
                     self.width = document.body.clientWidth;
                     self._getCourseValue(handler);
                 }
+            } else if (event === "updateCursor") {
+                handler();
             }
         },
         render: function (viewCmd, parameter) {
@@ -132,15 +123,6 @@
                             _.addClass(tab,'sel');
                         } else {
                             _.delClass(tab,'sel');
-                        }
-                    });
-                },
-                cursorChange: function() {
-                    self.$cursors.forEach(function(cursor, index) {
-                        if (parseInt(cursor.innerHTML) === this.pageNo) {
-                            _.addClass(cursor,'crt');
-                        } else {
-                            _.delClass(cursor,'crt');
                         }
                     });
                 },

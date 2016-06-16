@@ -5,6 +5,7 @@
   	function Controller(model, view) {
   		this.model = model;
   		this.view = view;
+      this.cursor = new Cursor();
 
   		this.init();	
   	}
@@ -35,15 +36,21 @@
         });
 
         self.view.bind('getCourseValue', function(pageNo,psize,type) {
-          self.updateCourse(pageNo,psize,type);
+          self.model.setCourse(pageNo,psize,type);
         });
 
         self.view.bind('tabChange', function(pageNo,psize,type) {
-          self.tabChange(pageNo,psize,type);
+          self.model.setCourse(pageNo,psize,type);
+          self.tabChange();
         });
 
         self.view.bind('resize', function(pageNo,psize,type) {
-          self.updateCourse(pageNo,psize,type);
+          self.model.setCourse(pageNo,psize,type);
+          self.updateCourse();
+        });
+
+        self.view.bind('updateCursor', function() {
+            self.updateCursor();
         });
     	},
       /* /和view层事件绑定 */
@@ -73,18 +80,26 @@
           self.view.render('concerndCancel');
         });
       },
-      updateCourse: function(pageNo,psize,type) {
+      updateCourse: function(callback) {
         var self = this;
-        self.model.getCourse(pageNo,psize,type,function(data){
+        self.model.getCourse(function(data){
+          // 更新课程显示
           self._updateCourse(data.list);
-          self._updateCursor(data.totalPage);
+          // 执行回调
+          callback = callback || function () {};
+          callback();
         });
       },
-      tabChange: function(pageNo,psize,type) {
+      tabChange: function() {
         var self = this;
         self.view.render('tabChange');
-        self.updateCourse(pageNo,psize,type);
+        self.updateCourse(function() {
+          this._updateCursor();
+        });
       },
+      updateCursor: function() {
+        this._updateCursor();
+      }
     });
 
     // 私有事件
@@ -148,8 +163,30 @@
       _updateCourse: function(courseList) {
         this.view.render('updateCourse', courseList);
       },
-      _updateCursor: function(totalPage) {
-        
+      _updateCursor: function(container) {
+        var self = this;
+        var pageSum = self.model.getAllPage();
+        if (!pageSum) {
+          return;
+        }
+        var cursorData = [];
+        for (var i = 0; i < pageSum; i++) {
+          cursorData.push(i+1);
+        }
+        // cursor组件
+        var cursor = new Cursor({
+            // 给定视口
+            container: container,
+            // 指示器
+            prevData: "<",
+            nextData: ">",
+            cursorData: cursorData
+        });
+
+        cursor.on("select", function(pageNo){
+          self.model.setCourse(pageNo);
+          self.updateCourse();
+        });
       }
     });
 
