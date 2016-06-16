@@ -39,7 +39,6 @@
     // 容器节点，如果没有传入container，默认为body节点，
     // 且设置hidden样式，防止当前视口外显示
     this.container = this.container || document.body;
-    this.container.style.overflow = 'hidden';
 
     // slider节点，并转换为数组
     this.slider = this._layout.cloneNode(true);
@@ -55,9 +54,6 @@
     this.slideIndex = 1;
     this.pageIndex = this.pageIndex || 0;
     this.offsetAll = this.pageIndex;
-
-    // 初始化，给外部容器增加轮播组件
-    this.container.appendChild(this.slider);
 
     // 拖拽
     if(this.drag) {
@@ -77,6 +73,14 @@
   // 轮播组件事件
   _.extend( Slider.prototype, {
     _layout: html2node(template),
+
+    // 和容器绑定显示接口
+    show: function(container) {
+      this.container = container || this.container;
+      // 初始化，给外部容器增加指示器组件
+      this.container.appendChild(this.slider);
+      this.container.style.overflow = 'hidden';
+    },
 
     // 页面跳转接口
     nav: function( pageIndex ) {
@@ -137,7 +141,7 @@
     },
     // 标准化下标
     _normIndex: function(index, len){
-      return (len + index) % len
+      return (len + index) % len;
     },
     _onNav(pageIndex, slideIndex) {
       var imgList = this.images;

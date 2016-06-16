@@ -20,6 +20,11 @@
 	    // cursor节点
 	    this.cursorNode = this._layout.cloneNode(true);
 
+	    // 总共的指示器数量
+        this.dataNum = this.cursorData.length;
+        // 当前显示的指示器数量，默认为8
+		this.cursorNum = this.showNum || 8;
+
 	    // 根据数据初始化指示器
 	    if (options.cursorData) {
 	    	this._init();
@@ -28,19 +33,17 @@
 		// 将后续经常用到的节点放在实例上，避免查找开销
 		// 指示器节点
 		this.cursors = _.$qsa('.m-cursor .cursor',this.cursorNode);
-		// 总共的数量
-        this.allCursor = this.cursors.length;
 		if (this.prevData) {
 			this.prev = _.$qs('.m-cursor .prev',this.cursorNode);
-			this.allCursor -= 1;
 		}
         if (this.nextData) {
         	this.next = _.$qs('.m-cursor .next',this.cursorNode);
-        	this.allCursor -= 1;
         }
 
         // 当前选中项
-        this.crtIndex = 1;
+        this.crtIndex = 0;
+        // 当前点击的项为界面显示的cursors中第几项
+        this.currentIndex = 0;
 
 	    // 初始化事件
 	    this._initEvent();
@@ -64,24 +67,93 @@
 
 		// 前一个
 		doPrev: function() {
-			var index = this.crtIndex <= 1? 1:(this.crtIndex-1+this.allCursor)%this.allCursor;
-			this.select(index);
+			// 第一个点击无效
+			if (this.crtIndex === 0) {
+				return;
+			}
+			var index = this.crtIndex-1;
+			this._update(index);
 		},
 
 		doNext: function() {
-			var index = (this.crtIndex+1+this.allCursor)%this.allCursor;
-			this.select(index);
+			// 最后一个点击无效
+			if (this.crtIndex === this.dataNum-1) {
+				return;
+			}
+			var index = this.crtIndex+1;
+			this._update(index);
 		},
 
-		select: function(selIndex) {
+		select: function() {
+			var target = _.getTarget(event);
+			var index = target.dataset.index;
+			if (index === "more") {
+				return;
+			} else if(index === "prev") {
+				this.doPrev();
+			} else if (index === "next") {
+				this.doNext();
+			} else {
+				index = parseInt(index);
+				this._update(index);
+			}
+		},
+
+		_update: function(selIndex) {
 			this.crtIndex = selIndex;
-			this.cursors.forEach(function(cursor, index) {
-                if (index === selIndex) {
-                    _.addClass(cursor,'crt');
-                } else {
-                    _.delClass(cursor,'crt');
-                }
-            });
+			var dataNum = this.dataNum,
+				cursorNum = this.cursorNum,
+				middleIndex = parseInt((cursorNum+1)/2),
+				needUpdate = false;
+
+			// 当前选中项为第一项和最后一项时，prev/next不可用
+			_.delClass(this.prev,'disabled');
+			_.delClass(this.next,'disabled');
+			if (selIndex === 0) {
+				_.addClass(this.prev,'disabled');
+			} else if (selIndex === this.dataNum-1) {
+				_.addClass(this.next,'disabled');
+			}
+
+			for (var i = 0,cursor; cursor = this.cursors[i]; i++) {
+				_.delClass(cursor,'crt');
+				// 判断总的数量是否超过显示数量，更新cursors
+				// 如果选择项大于中间项,更新第二项为省略号
+				// 如果选择项小于所有数据项-2，更新倒数第二项为省略号
+				if(dataNum > cursorNum && 
+					((i===1 && selIndex >= middleIndex) || 
+						(i===(cursorNum-2) && selIndex<(dataNum-middleIndex-1)))) {
+					cursor.dataset.index = "more";
+					cursor.innerHTML = "...";
+					_.addClass(cursor,'disabled');
+					_.delClass(cursor,'crt');
+					needUpdate = true;
+				} else if( i!==0 && i!==(cursorNum-1)) {
+					var index = parseInt(cursor.dataset.index);
+					if (!index && index !== 0) {
+						needUpdate = true;
+					}
+					// 仅选择中间需要改变的项才需要重新设置cursor的值
+					if (selIndex < middleIndex) {
+						index = i;
+					} else if (selIndex >= dataNum-middleIndex-1) {
+						index = (dataNum-cursorNum)+i;
+					} else {
+						index = selIndex-(middleIndex-1)+i;
+					}
+
+					if (needUpdate) {
+						cursor.dataset.index = index;
+						cursor.innerHTML = this.cursorData[index];
+						_.delClass(cursor,'disabled');
+					}
+					if (index === selIndex) {
+	                    _.addClass(cursor,'crt');
+	                }
+				} else if ((selIndex === 0 && i === 0) || ((i === cursorNum-1) && selIndex === dataNum-1)) {
+					_.addClass(cursor,'crt');
+				}
+			}
             // 触发select事件
             this.emit('select',this.cursorData[selIndex]);
 		},
@@ -90,39 +162,32 @@
 			var template = "";
 			// 根据数据构建指示器
 			if (this.prevData) {
-				template += "<li class='prev'>" + this.prevData + "</li>";
+				template += "<li class='prev disabled' data-index='prev'>" + this.prevData + "</li>";
 			}
 			if (this.cursorData) {
-				for (var i = 0; i < this.cursorData.length; i++) {
+				var length = this.cursorData.length;
+				var showNum = this.cursorNum;
+				for (var i = 0; i < length && i < (showNum-1); i++) {
 					if (i === 0) {
-						template += "<li class='cursor crt'>" + this.cursorData[i] + "</li>";
+						template += "<li class='cursor crt' data-index='"+ i +"'>" + this.cursorData[i] + "</li>";
+					} else if (length > showNum && i === (showNum-2)) {
+						template += "<li class='cursor disabled' data-index='more'>...</li>";
 					} else {
-						template += "<li class='cursor'>" + this.cursorData[i] + "</li>";
+						template += "<li class='cursor' data-index='"+ i +"'>" + this.cursorData[i] + "</li>";
 					}
 				}
+				template += "<li class='cursor' data-index='"+ (this.dataNum-1) +"'>" + this.cursorData[this.dataNum-1] + "</li>";
 			}
 			if (this.nextData) {
-				template += "<li class='next'>" + this.nextData + "</li>";
+				template += "<li class='next' data-index='next'>" + this.nextData + "</li>";
 			}
 			this.cursorNode.innerHTML = template;
 		},
 
 		// 事件初始化
 		_initEvent: function() {
-			var self = this;
-			// 给每个序号绑定click事件，点击定位到对应轮播图片位置
-	        self.cursors.forEach(function(cursor,index) {
-	        	_.addEvent(cursor,'click',function() {
-	        		self.select.call(self,index);
-	        	});
-	        });
-	        // prev及next
-	        if (self.prevData) {
-				_.addEvent(self.prev, 'click',self.doPrev.bind(self));
-			}
-	        if (self.nextData) {
-	        	_.addEvent(self.next, 'click',self.doNext.bind(self));
-	        }
+			// 使用事件代理绑定click事件
+	        _.delegateEvent(this.cursorNode, 'li', 'click', this.select.bind(this));
 		}
 	});
 

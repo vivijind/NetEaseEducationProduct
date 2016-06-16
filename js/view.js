@@ -23,6 +23,9 @@
         this.$navCancel = _.$qs('.m-nav .nav-info .cancel');
         this.$navFansNum = _.$qs('.m-nav .nav-info .number');
 
+        // slider
+        this.$slider = _.$qs('.g-hd .m-sld');
+
         // tab
         this.$tab = _.$qs('.g-mn .tab');
         this.$tabs = _.$gt('li',this.$tab);
@@ -84,8 +87,11 @@
                 self._getCourseValue(handler);
             } else if (event === 'resize') {
                 window.onresize = function() {
-                    self.width = document.body.clientWidth;
-                    self._getCourseValue(handler);
+                    if (self.width !== document.body.clientWidth) {
+                        // 仅宽度发生变化时，执行事件更新
+                        self.width = document.body.clientWidth;
+                        self._getCourseValue(handler);
+                    }
                 }
             }
         },
@@ -128,7 +134,11 @@
                     self._updateCourse(parameter);
                 },
                 updateCursor: function() {
+                    self.$cursor.innerHTML = "";
                     parameter.show(self.$cursor);
+                },
+                sliderShow: function() {
+                    parameter.show(self.$slider);
                 }
             };
 

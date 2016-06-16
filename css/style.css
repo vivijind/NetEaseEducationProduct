@@ -71,13 +71,6 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .nav-link li a:hover{color:#39a030}
 .nav-link .sch{width:19px;height:19px;background:url(../img/icon.png) no-repeat;background-position:-250px -55px;}
 .nav-link .sch:hover{background-position:-273px -55px;cursor:pointer;}
-/* 轮播图  */
-.m-sld{position:relative;left:50%;transform:translateX(-50%);height:460px;width:100%;overflow:hidden;}
-.m-sld img{width:100%;height:100%;}
-.m-sld .pointer {position:absolute;bottom:20px;left:50%;transform:translateX(-50%);}
-.m-sld .pointer i{display:inline-block;height:10px;width:10px;border-radius:10px;background-color:#fff;}
-.m-sld .pointer i+i {margin-left:11px;}
-.m-sld .pointer i.crt{background-color:#000;}
 
 /* 内容区产品 */
 .m-ct{height:176px;margin:61px auto;max-width:1205px;}
@@ -164,23 +157,40 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 }
 
 /* 登录弹窗 */
-.m-modal .modal_mask{position:fixed;z-index:1;width:100%;height:100%;background-color:rgba(0,0,0,0.8);}
-.m-modal .modal_wrap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;width:386px;height:288px;padding-left:40px;box-sizing:border-box;background-color:#fff;font:16px/28px "微软雅黑";}
+.m-modal .modal_mask{position:fixed;top:0;left:0;z-index:99;width:100%;height:100%;background-color:rgba(50,50,50,0.8);}
+.m-modal .modal_wrap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;width:386px;height:288px;padding-left:40px;box-sizing:border-box;background-color:#fff;font:12px/12px "微软雅黑";}
 .m-modal .modal_cancel{position:absolute;top:10px;right:8px;width:10px;height:10px;background:url(../img/icon.png) no-repeat;background-position:-280px -31px;}
 .m-modal .modal_cancel:hover{cursor:pointer;}
 .m-modal .modal_head{margin-top:20px;}
 .m-modal .modal_head{font:18px/28px "微软雅黑";}
 .m-modal .modal_body{margin-top:20px;}
-.m-modal .modal_body input{width:295px;height:45px;border:1px solid #dfdfdf;box-shadow:1px 1px 1px #f1f1f1 inset;}
+.m-modal .modal_body input{width:295px;height:45px;border:1px solid #dfdfdf;box-shadow:1px 1px 0 1px #f1f1f1 inset;font:16px/28px "微软雅黑";text-indent:11px;}
 .m-modal .modal_body input+input{margin-top:15px;}
 .m-modal .modal_foot{margin-top:29px;}
-.m-modal .modal_foot .login{width:293px;height:46px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;}
-.m-modal .modal_message{display:none;}
+.m-modal .modal_foot .login{width:293px;height:46px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;letter-spacing:3px;font:16px/46px "微软雅黑";}
+.m-modal .modal_message{display:none;margin-top:5px;}
 
-/* 指示器 */
+/* 指示器（翻页器） */
 .g-mbd{position:relative;}
-.m-cursor{position:absolute;right:245px;bottom:120px;font-size:0;}
-.m-cursor li{display:inline-block;text-align:center;width:20px;height:20px;margin-left:10px;font:14px/20px "微软雅黑";}
-.m-cursor li.prev,.m-cursor li.next{width:30px;background-color:#9dd8b1;color:white;}
-.m-cursor li:hover{background-color:#9dd8b1;color:#fff;cursor:pointer;}
-.m-cursor li.crt{color:#39a030;}
+.g-mbd .m-cursor{position:absolute;right:245px;bottom:120px;font-size:0;}
+.g-mbd .m-cursor li{display:inline-block;text-align:center;width:20px;height:20px;margin-left:10px;font:14px/20px "微软雅黑";}
+.g-mbd .m-cursor li.prev,.m-cursor li.next{width:30px;background-color:#9dd8b1;color:white;}
+.g-mbd .m-cursor li:hover{background-color:#9dd8b1;color:#fff;cursor:pointer;}
+.g-mbd .m-cursor li.disabled{background-color:#ccc;}
+.g-mbd .m-cursor li.disabled:hover{cursor:default;}
+.g-mbd .m-cursor li.cursor.disabled,.m-cursor li.cursor.disabled:hover{background-color:transparent;color:#333;}
+.g-mbd .m-cursor li.crt{color:#39a030;}
+
+/* 轮播图  */
+.m-sld{position:relative;left:50%;transform:translateX(-50%);height:460px;width:100%;overflow:hidden;}
+/* 轮播组件 */
+.m-slider {position:relative;transition-property:transform;transition-duration:1s;transition-timing-function:ease-out;}
+.m-slider, .m-slider .slide {width:100%;height:100%;}
+.m-slider .slide {position:absolute;top:0;left:0;text-align:center;vertical-align:middle;}
+.m-slider .slide.z-active{transition:opacity .2s ease-in;}
+.m-slider .slide img{width:100%;height:100%;}
+/* 指示器（轮播） */
+.m-sld .m-cursor {position:absolute;bottom:20px;left:50%;transform:translateX(-50%);}
+.m-sld .m-cursor li{display:inline-block;height:10px;width:10px;border-radius:10px;background-color:#fff;}
+.m-sld .m-cursor li+li {margin-left:11px;}
+.m-sld .m-cursor li.crt{background-color:#000;}

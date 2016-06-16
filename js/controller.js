@@ -15,6 +15,7 @@
   	Controller.prototype.setView = function (locationHash) {
   		this.displayTips();
       this._concernShow();
+      this._sliderShow();
   	};
 
 	  // Controller层事件
@@ -181,6 +182,37 @@
 
         // 显示
         self.view.render('updateCursor',cursor);
+      },
+      // 轮播图显示
+      _sliderShow: function() {
+        // 轮播组件
+        var slider = new Slider({
+            // 轮播图片列表
+            images: [
+                "img/banner1.jpg",
+                "img/banner2.jpg",
+                "img/banner3.jpg"
+            ],
+
+            // 是否允许拖拽
+            drag: true,
+
+            // 是否自动轮播
+            auto: true
+        });
+
+        // 轮播对应的cursor组件
+        var pointer = new Cursor({
+            // 指示器
+            cursorData: ['','','']
+        });
+
+
+        // 设置当前初始显示页
+        slider.nav(0);
+        // 显示
+        this.view.render('sliderShow',slider);
+        this.view.render('sliderShow',pointer);
       }
     });
 

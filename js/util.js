@@ -27,6 +27,10 @@ var util = (function(){
       return document.getElementById(id);
     },
 
+    getTarget: function(event) {
+      return event.target || event.srcElement;
+    },
+
     // 绑定事件
     addEvent: function(elem, type, listener, useCapture) {
       document.addEventListener ? elem.addEventListener(type, listener, useCapture):
@@ -47,7 +51,7 @@ var util = (function(){
     delegateByClass: function (target, selector, type, handler) {
       var self = this;
       function dispatchEvent(event) {
-        var targetElement = event.target;
+        var targetElement = self.getTarget(event);
         var potentialElements = self.$qsa(selector, target);
         var hasMatch = Array.prototype.indexOf.call(potentialElements, targetElement) >= 0;
 
