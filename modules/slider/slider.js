@@ -143,73 +143,80 @@
       return (len + index) % len;
     },
     _onNav: function(pageIndex, slideIndex) {
-      var imgList = this.images;
-      var slides = this.slides;
-
+      var self = this,
+          imgList = self.images,
+          slides = self.slides;
+      var handlerCk = function() {
+          self._onClick.call(self);
+      }
+ 
       // 图片下标和slide下标由0开始
       for(var i = -1; i <= 1; i ++) {
-        var index = this._getNum((slideIndex+i),3);
+        var index = self._getNum((slideIndex+i),3);
         var img = slides[index].querySelector("img");     // 当前img结点
         if(!img) {
           img = document.createElement("img");
           slides[index].appendChild(img);
         }
-        var index = this._getNum((pageIndex+i),this.pageNum);
+        var index = self._getNum((pageIndex+i),self.pageNum);
         img.src = imgList[index];
 
         // 先移除已有的click事件
-        _.delEvent(img,"click",this._onClick);
+        _.delEvent(img,"click",handlerCk);
         // 给img添加新的click事件，跳转到新的页面链接
-        _.addEvent(img,"click",this._onClick);
-        _.delEvent(img,"click",this._onClick);
+        _.addEvent(img,"click",handlerCk);
       }
 
-      // _.addEvent(this.slider,"click",this._onClick.bind(this,index));
+      _.addEvent(slides[0].querySelector("img"),"click",handlerCk);
+      // _.delEvent(slides[slideIndex].querySelector("img"),"click",handlerCk);
+      // _.delEvent(slides[slideIndex-1].querySelector("img"),"click",handlerCk);
+      // _.delEvent(slides[slideIndex+1].querySelector("img"),"click",handlerCk);
       // 触发nav事件
-      this.emit("nav",{pageIndex:pageIndex, slideIndex: slideIndex});
+      self.emit("nav",{pageIndex:pageIndex, slideIndex: slideIndex});
     },
 
-    _onClick: function(index) {
-      index = 
-      var dragInfo = this._dragInfo,
+    _onClick: function() {
+      var index = this.slideIndex
+          dragInfo = this._dragInfo,
           imgLinkList = this.links;
       if(dragInfo.start) return false;
+
       // img点击后跳转到链接
       window.open(imgLinkList[index]);
+      ev.preventDefault();
+      ev.stopPropagation();
     },
 
     // 拖拽
-    _initDrag: function() {
-      // 拖拽初始化
+    _initDrag: function(){
       this._dragInfo = {};
-      _.addEvent(this.slider,"mousedown", this._dragstart.bind(this));
-      _.addEvent(this.slider,"mouseleave", this._dragend.bind(this));
+      this.slider.addEventListener('mousedown', this._dragstart.bind(this));
+      this.slider.addEventListener('mouseleave', this._dragend.bind(this));
     },
 
-    _dragstart: function(ev) {
-      var dragInfo = this._dragInfo;
+    _dragstart: function(ev){
+      var self = this;
+      var dragInfo = self._dragInfo;
       dragInfo.start = {x: ev.pageX, y: ev.pageY};
-      _.addEvent(this.slider,"mousemove", this._dragmove.bind(this));
-      _.addEvent(this.slider,"mouseup", this._dragend.bind(this));
-      _.delEvent(this.slider,"mousemove", this._dragmove.bind(this));
-      _.delEvent(this.slider,"mouseup", this._dragend.bind(this));
-      this.slider.removeEventListener('mousemove',this._dragmove.bind(this));
-      this.slider.removeEventListener('mouseup',this._dragmove.bind(this));
-      this.slider.onmousemove = null;
-      this.slider.onmouseup = null;
+      var handlerMM = function() {
+        self._dragmove.call(self,event);
+      }
+      var handlerMU = function() {
+        self._dragend.call(self,event);
+        _.delEvent(self.slider,"mousemove", handlerMM);
+        _.delEvent(self.slider,"mouseup", handlerMU);
+      }
+
+      _.addEvent(self.slider,"mousemove", handlerMM);
+      _.addEvent(self.slider,"mouseup", handlerMU);
     },
 
-    _dragmove: function(ev) {
-      _.delEvent(this.slider,"mousemove", this._dragmove.bind(this));
-      _.delEvent(this.slider,"mouseup", this._dragend.bind(this));
-      this.slider.removeEventListener('mousemove',this._dragmove.bind(this),true);
-      this.slider.removeEventListener('mouseup',this._dragmove.bind(this),true);
-      this.slider.onmousemove = null;
-      this.slider.onmouseup = null;
+    _dragmove: function(ev){
+
       var dragInfo = this._dragInfo;
+      // 如果还没有开始拖拽则退出
       if(!dragInfo.start) return;
 
-      // 默认，及选取清除
       ev.preventDefault();
       ev.stopPropagation();
       this.slider.style.transitionDuration = '0s';
@@ -225,9 +232,11 @@
       // 加translateZ 分量是为了触发硬件加速
       this.slider.style.transform = 
        'translateX(' +  (-(this.offsetWidth * this.offsetAll - ev.pageX+start.x)) + 'px) translateZ(0)'
+
     },
 
     _dragend: function( ev ){
+
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 
@@ -240,18 +249,11 @@
       // 看走了多少距离
       var deltX = pageX - start.x;
       if( Math.abs(deltX) > this.breakPoint ){
-        this._step(deltX>0? -1: 1);
+        this._step(deltX>0? -1: 1)
       }else{
-        this._step(0);
+        this._step(0)
       }
 
-      _.delEvent(this.slider,"mousemove", this._dragmove.bind(this));
-      _.delEvent(this.slider,"mouseup", this._dragend.bind(this));
-      this.slider.removeEventListener('mousemove',this._dragmove.bind(this),true);
-      this.slider.removeEventListener('mouseup',this._dragmove.bind(this),true);
-      this.slider.onmousemove = null;
-      this.slider.onmouseup = null;
-      return false;
     },
 
     // 自动轮播相关
