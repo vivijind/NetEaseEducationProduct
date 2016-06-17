@@ -1,26 +1,4 @@
-(function () {
-	var htmlEscapes = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;',
-		'"': '&quot;',
-		'\'': '&#x27;',
-		'`': '&#x60;'
-	};
-
-	var escapeHtmlChar = function (chr) {
-		return htmlEscapes[chr];
-	};
-
-	var reUnescapedHtml = /[&<>"'`]/g;
-	var reHasUnescapedHtml = new RegExp(reUnescapedHtml.source);
-
-	var escape = function (string) {
-		return (string && reHasUnescapedHtml.test(string))
-			? string.replace(reUnescapedHtml, escapeHtmlChar)
-			: string;
-	};
-
+(function (_) {
 	/**
 	 * 基本模板设置
 	 */
@@ -80,13 +58,13 @@
 
 			template = template.replace(/{{index}}/g , i);
 			template = template.replace(/{{id}}/g, data[i].id);
-			template = template.replace(/{{name}}/g, escape(data[i].name));
+			template = template.replace(/{{name}}/g, _.escape(data[i].name));
 			template = template.replace(/{{middlePhotoUrl}}/g, data[i].middlePhotoUrl);
-			template = template.replace(/{{provider}}/g, escape(data[i].provider));
+			template = template.replace(/{{provider}}/g, _.escape(data[i].provider));
 			template = template.replace(/{{learnerCount}}/g, data[i].learnerCount);
 			template = template.replace(/{{price}}/g, price);
-			template = template.replace(/{{categoryName}}/g, escape(data[i].categoryName));
-			template = template.replace(/{{description}}/g, escape(data[i].description));
+			template = template.replace(/{{categoryName}}/g, _.escape(data[i].categoryName));
+			template = template.replace(/{{description}}/g, _.escape(data[i].description));
 
 			view = view + template;
 		}
@@ -109,4 +87,4 @@
  	   // 直接暴露到全局
  	   window.Template = Template;
   	}
-})();
+})(util);

@@ -16,6 +16,7 @@
   		this.displayTips();
       this._concernShow();
       this._sliderShow();
+      this._hotCourseShow();
   	};
 
 	  // Controller层事件
@@ -200,11 +201,12 @@
                 "http://www.icourse163.org/"
             ],
 
-            // 是否允许拖拽
-            drag: true,
+            intervalTime: 5000,
+
+            fadeTime: 500,
 
             // 是否自动轮播
-            auto: true
+            auto: false
         });
 
         // 轮播对应的cursor组件
@@ -230,6 +232,36 @@
         // 显示
         this.view.render('sliderShow',slider);
         this.view.render('sliderShow',pointer);
+      },
+      _hotCourseShow: function() {
+        var hotCourse = new SliderCourse({
+            // 轮播图片列表
+            images: [
+                "img/banner1.jpg",
+                "img/banner2.jpg",
+                "img/banner3.jpg"
+            ],
+            // 图片对应的链接列表
+            links: [
+                "http://open.163.com/",
+                "http://study.163.com/",
+                "http://www.icourse163.org/"
+            ],
+
+            showNum: 12,
+
+            intervalTime: 5000,
+
+            fadeTime: 500,
+
+            // 是否自动轮播
+            auto: true
+        });
+
+        // 设置当前初始显示
+        hotCourse.nav(0);
+        // 显示
+        this.view.render('HotCourseShow',hotCourse);
       }
     });
 

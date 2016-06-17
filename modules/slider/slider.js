@@ -1,6 +1,6 @@
 /**
  *      -------------------
- *      |     |     |     |  <- 只有三栏是常驻的
+ *      |     |     |     |  <- 默认只有三栏是常驻的
  * -------------------------------
  * |    |     |     |     |      |
  * |    |     |     |     |      |
@@ -13,18 +13,10 @@
  *      -------------------
  */
 
+// 还未解决点击click和拖拽问题，暂不支持拖拽事件
 
 // 立即执行，传入util，使用一些通用函数接口
 ;(function(_){
-  // 需要使用到的函数
-  // 将HTML转换为节点
-  function html2node(str){
-    var container = document.createElement('div');
-    container.innerHTML = str;
-    return container.children[0];
-  }
-
-
   var template = 
   '<div class="m-slider" >\
     <div class="slide"></div>\
@@ -33,7 +25,7 @@
   </div>';
 
   function Slider(opt) {
-    // 将数据复制到自身示例上
+    // 将数据复制到自身实例上
     _.extend(this,opt);
 
     // 容器节点，如果没有传入container，默认为body节点，
@@ -48,16 +40,18 @@
     this.offsetWidth = this.container.offsetWidth;
     this.breakPoint = this.offsetWidth/4;
 
-    this.pageNum = this.images.length;
+    this.pageNum = this.images? this.images.length : 3;
 
     // 内部数据结构
     this.slideIndex = 1;
     this.pageIndex = this.pageIndex || 0;
-    this.offsetAll = this.pageIndex;
+
+    // 动画设置
+    this.fadeTime = this.fadeTime || 500;
 
     // 拖拽
     if(this.drag) {
-      this._initDrag();
+      // this._initDrag();
     }
 
     // 轮播，并响应鼠标移动上去暂停轮播事件
@@ -72,7 +66,7 @@
 
   // 轮播组件事件
   _.extend( Slider.prototype, {
-    _layout: html2node(template),
+    _layout: _.html2node(template),
 
     // 和容器绑定显示接口
     show: function(container) {
@@ -85,7 +79,7 @@
     // 页面跳转接口
     nav: function( pageIndex ) {
       this.pageIndex = pageIndex;
-      this.slideIndex = typeof this.slideIndex === 'number'? this.slideIndex: (pageIndex+1) % 3;
+      this.slideIndex = typeof this.slideIndex === 'number'? this.slideIndex: (pageIndex+1) % this.showNum;
       this.offsetAll = pageIndex;
 
       this.slider.style.transitionDuration = '0s';
@@ -102,8 +96,6 @@
     },
     // 单步移动
     _step: function(offset){
-
-      this.offsetAll += offset;
       this.pageIndex += offset;
       this.slideIndex += offset;
       this.slider.style.transitionDuration = '.5s';
@@ -112,28 +104,45 @@
     },
     // 执行
     _calcSlide: function() {
+      var showNum = this.showNum;
       var pageIndex = this.pageIndex = this._getNum(this.pageIndex, this.pageNum);
-      var slideIndex = this.slideIndex = this._getNum(this.slideIndex,3);
-      var prevslideIndex = this._getNum(this.slideIndex-1,3);
-      var nextslideIndex = this._getNum(this.slideIndex+1,3);
-      var offsetAll = this.offsetAll;
+      var slideIndex = this.slideIndex = this._getNum(this.slideIndex,showNum);
+      var prevslideIndex = this._getNum(this.slideIndex-1,showNum);
+      var nextslideIndex = this._getNum(this.slideIndex+1,showNum);
       var pageNum = this.pageNum;
-      
+ 
       var slides = this.slides;
-      slides[slideIndex].style.left = offsetAll*100 + "%";
-      slides[prevslideIndex].style.left = (offsetAll-1)*100 + "%";
-      slides[nextslideIndex].style.left = (offsetAll+1)*100 + "%";
+      slides[slideIndex].style.opacity = 0;
+      slides[prevslideIndex].style.opacity = 1;
+      slides[nextslideIndex].style.opacity = 0;
 
-      // 容器偏移
-      this.slider.style.transform = "translateX(" + (-offsetAll*100) + "%) translateZ(0px)";
-    
       // 给当前slideIndex添加z-active
       slides.forEach(function(node){ _.delClass(node, 'z-active') })
       _.addClass(slides[slideIndex], 'z-active');
 
       // 图片url处理
       this._onNav(this.pageIndex, this.slideIndex);
+
+      this._fadeIn(slides[slideIndex]);
     },
+
+    // 淡入效果
+    _fadeIn: function(ele) {
+        var stepLength = 1/50;
+        if (parseFloat(ele.style.opacity)) {
+            ele.style.opacity = 0;
+        }
+        function step () {
+            if (parseFloat(ele.style.opacity)+stepLength < 1) {
+                ele.style.opacity = parseFloat(ele.style.opacity)+stepLength;
+            } else {
+                ele.style.opacity = 1;
+                clearInterval(setIntervalId);
+            }
+        }
+        var setIntervalId = setInterval(step, this.fadeTime/50);
+    },
+
     // getNum index标准化
     _getNum: function(index, len) {
       return (index + len)%len;
@@ -142,83 +151,53 @@
     _normIndex: function(index, len){
       return (len + index) % len;
     },
-    _onNav: function(pageIndex, slideIndex) {
-      var self = this,
-          imgList = self.images,
-          slides = self.slides;
-      var handlerCk = function() {
-          self._onClick.call(self);
-      }
- 
+    _onNav(pageIndex, slideIndex) {
+      var linkList = this.links;
+      var imgList = this.images;
+      var slides = this.slides;
+
       // 图片下标和slide下标由0开始
-      for(var i = -1; i <= 1; i ++) {
-        var index = self._getNum((slideIndex+i),3);
-        var img = slides[index].querySelector("img");     // 当前img结点
+      for(var i = -1; i <= this.showNum-1; i ++) {
+        var index = this._getNum((slideIndex+i),this.showNum);
+        var imglink = slides[index].querySelector("a");
+        var img = slides[index].querySelector("img"); // 当前img结点
         if(!img) {
           img = document.createElement("img");
-          slides[index].appendChild(img);
+          imglink = document.createElement("a");
+          imglink.appendChild(img);
+          slides[index].appendChild(imglink);
         }
-        var index = self._getNum((pageIndex+i),self.pageNum);
-        img.src = imgList[index];
-
-        // 先移除已有的click事件
-        _.delEvent(img,"click",handlerCk);
-        // 给img添加新的click事件，跳转到新的页面链接
-        _.addEvent(img,"click",handlerCk);
+        var imgIndex = this._getNum((pageIndex+i),this.pageNum);
+        img.src = imgList[imgIndex];
+        imglink.href = linkList[imgIndex] || "";
+        imglink.target = "_blank";
       }
 
-      _.addEvent(slides[0].querySelector("img"),"click",handlerCk);
-      // _.delEvent(slides[slideIndex].querySelector("img"),"click",handlerCk);
-      // _.delEvent(slides[slideIndex-1].querySelector("img"),"click",handlerCk);
-      // _.delEvent(slides[slideIndex+1].querySelector("img"),"click",handlerCk);
       // 触发nav事件
-      self.emit("nav",{pageIndex:pageIndex, slideIndex: slideIndex});
-    },
-
-    _onClick: function() {
-      var index = this.slideIndex
-          dragInfo = this._dragInfo,
-          imgLinkList = this.links;
-      if(dragInfo.start) return false;
-
-      // img点击后跳转到链接
-      window.open(imgLinkList[index]);
-      ev.preventDefault();
-      ev.stopPropagation();
+      this.emit("nav",{pageIndex:pageIndex, slideIndex: slideIndex});
     },
 
     // 拖拽
-    _initDrag: function(){
+    _initDrag() {
+      // 拖拽初始化
       this._dragInfo = {};
-      this.slider.addEventListener('mousedown', this._dragstart.bind(this));
-      this.slider.addEventListener('mouseleave', this._dragend.bind(this));
+      _.addEvent(this.slider,"mousedown", this._dragstart.bind(this));
+      _.addEvent(this.slider,"mousemove", this._dragmove.bind(this));
+      _.addEvent(this.slider,"mouseup", this._dragend.bind(this));
+      _.addEvent(this.slider,"mouseleave", this._dragend.bind(this));
     },
 
-    _dragstart: function(ev){
-      var self = this;
-      var dragInfo = self._dragInfo;
-      dragInfo.start = {x: ev.pageX, y: ev.pageY};
-      var handlerMM = function() {
-        self._dragmove.call(self,event);
-      }
-      var handlerMU = function() {
-        self._dragend.call(self,event);
-        _.delEvent(self.slider,"mousemove", handlerMM);
-        _.delEvent(self.slider,"mouseup", handlerMU);
-      }
-
-      _.addEvent(self.slider,"mousemove", handlerMM);
-      _.addEvent(self.slider,"mouseup", handlerMU);
-    },
-
-    _dragmove: function(ev){
-
+    _dragstart(ev) {
       var dragInfo = this._dragInfo;
-      // 如果还没有开始拖拽则退出
+      dragInfo.start = {x: ev.pageX, y: ev.pageY};
+    },
+
+    _dragmove(ev) {
+      var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 
+      // 默认，及选取清除
       ev.preventDefault();
-      ev.stopPropagation();
       this.slider.style.transitionDuration = '0s';
 
       var start = dragInfo.start;
@@ -241,7 +220,6 @@
       if(!dragInfo.start) return;
 
       ev.preventDefault();
-      ev.stopPropagation();
       var start = dragInfo.start;
       this._dragInfo = {};
       var pageX = ev.pageX;
@@ -253,9 +231,7 @@
       }else{
         this._step(0)
       }
-
     },
-
     // 自动轮播相关
     _initAuto: function() {
       this.timmer = null;
@@ -300,8 +276,21 @@
     }
   });
 
-  // 接口暴露到全局
-  window.Slider = Slider;
+  //          5.Exports
+  // ----------------------------------------------------------------------
+  // 暴露API:  Amd || Commonjs  || Global 
+  // 支持commonjs
+  if (typeof exports === 'object') {
+      module.exports = Slider;
+      // Slider
+  } else if (typeof define === 'function' && define.amd) {
+      define(function() {
+        return Slider;
+      });
+  } else {
+      // 直接暴露到全局
+      window.Slider = Slider;
+  }
 })(util);
 
 

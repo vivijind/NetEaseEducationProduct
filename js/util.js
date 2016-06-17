@@ -1,6 +1,21 @@
 /* 相关工具库 */
 
 var util = (function(){
+  var htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&#x27;',
+    '`': '&#x60;'
+  };
+
+  var escapeHtmlChar = function (chr) {
+    return htmlEscapes[chr];
+  };
+
+  var reUnescapedHtml = /[&<>"'`]/g;
+  var reHasUnescapedHtml = new RegExp(reUnescapedHtml.source);
 
   return {
     // 根据css选择器获取元素
@@ -143,6 +158,12 @@ var util = (function(){
       var container = document.createElement('div');
       container.innerHTML = str;
       return container.children[0];
+    },
+
+    escape: function (string) {
+      return (string && reHasUnescapedHtml.test(string))
+        ? string.replace(reUnescapedHtml, escapeHtmlChar)
+        : string;
     }
   }
 })()

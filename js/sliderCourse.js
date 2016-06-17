@@ -26,7 +26,14 @@
 
 
   var template = 
-  '<div class="m-slider" >\
+  '<div class="m-slider hotcourse" >\
+    <div class="slide"></div>\
+    <div class="slide"></div>\
+    <div class="slide"></div>\
+    <div class="slide"></div>\
+    <div class="slide"></div>\
+    <div class="slide"></div>\
+    <div class="slide"></div>\
     <div class="slide"></div>\
     <div class="slide"></div>\
     <div class="slide"></div>\

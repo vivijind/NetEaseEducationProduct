@@ -36,6 +36,8 @@
         // 课程列表
         this.$courseLst = _.$qs('.g-mn .lst');
 
+        // 热门课程
+        this.$hotCourse = _.$qs('.g-sd .top-lst');
 
         // 浏览器宽度
         this.width = document.body.clientWidth;
@@ -139,6 +141,9 @@
                 },
                 sliderShow: function() {
                     parameter.show(self.$slider);
+                },
+                HotCourseShow: function() {
+                    parameter.show(self.$hotCourse);
                 }
             };
 
