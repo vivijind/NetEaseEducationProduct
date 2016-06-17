@@ -215,6 +215,8 @@
 
         pointer.on("select",function(value,index){
             slider.nav(index);
+            //传入true表示在一定时间内不点击，则自动开启轮播动画
+            slider.autoEnd(true);  
         });
         
         // 每次slider图片位置变化，cursor也变化，增加监听处理

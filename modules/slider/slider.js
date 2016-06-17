@@ -143,52 +143,75 @@
       return (len + index) % len;
     },
     _onNav: function(pageIndex, slideIndex) {
-      var imgLinkList = this.links;
       var imgList = this.images;
       var slides = this.slides;
 
       // 图片下标和slide下标由0开始
       for(var i = -1; i <= 1; i ++) {
         var index = this._getNum((slideIndex+i),3);
-        var imglink = slides[index].querySelector("a"),   // 当前链接结点
-            img = slides[index].querySelector("img");     // 当前img结点
+        var img = slides[index].querySelector("img");     // 当前img结点
         if(!img) {
-          imglink = document.createElement("a");
           img = document.createElement("img");
-          imglink.appendChild(img);
-          slides[index].appendChild(imglink);
+          slides[index].appendChild(img);
         }
         var index = this._getNum((pageIndex+i),this.pageNum);
-        imglink.href = imgLinkList[index];
-        imglink.target = "_blank";
         img.src = imgList[index];
+
+        // 先移除已有的click事件
+        _.delEvent(img,"click",this._onClick);
+        // 给img添加新的click事件，跳转到新的页面链接
+        _.addEvent(img,"click",this._onClick);
+        _.delEvent(img,"click",this._onClick);
       }
 
+      // _.addEvent(this.slider,"click",this._onClick.bind(this,index));
       // 触发nav事件
       this.emit("nav",{pageIndex:pageIndex, slideIndex: slideIndex});
+    },
+
+    _onClick: function(index) {
+      index = 
+      var dragInfo = this._dragInfo,
+          imgLinkList = this.links;
+      if(dragInfo.start) return false;
+      // img点击后跳转到链接
+      window.open(imgLinkList[index]);
     },
 
     // 拖拽
     _initDrag: function() {
       // 拖拽初始化
       this._dragInfo = {};
-      this.slider.addEventListener("mousedown", this._dragstart.bind(this));
-      this.slider.addEventListener("mousemove", this._dragmove.bind(this));
-      this.slider.addEventListener("mouseup", this._dragend.bind(this));
-      this.slider.addEventListener("mouseleave", this._dragend.bind(this));
+      _.addEvent(this.slider,"mousedown", this._dragstart.bind(this));
+      _.addEvent(this.slider,"mouseleave", this._dragend.bind(this));
     },
 
     _dragstart: function(ev) {
       var dragInfo = this._dragInfo;
       dragInfo.start = {x: ev.pageX, y: ev.pageY};
+      _.addEvent(this.slider,"mousemove", this._dragmove.bind(this));
+      _.addEvent(this.slider,"mouseup", this._dragend.bind(this));
+      _.delEvent(this.slider,"mousemove", this._dragmove.bind(this));
+      _.delEvent(this.slider,"mouseup", this._dragend.bind(this));
+      this.slider.removeEventListener('mousemove',this._dragmove.bind(this));
+      this.slider.removeEventListener('mouseup',this._dragmove.bind(this));
+      this.slider.onmousemove = null;
+      this.slider.onmouseup = null;
     },
 
     _dragmove: function(ev) {
+      _.delEvent(this.slider,"mousemove", this._dragmove.bind(this));
+      _.delEvent(this.slider,"mouseup", this._dragend.bind(this));
+      this.slider.removeEventListener('mousemove',this._dragmove.bind(this),true);
+      this.slider.removeEventListener('mouseup',this._dragmove.bind(this),true);
+      this.slider.onmousemove = null;
+      this.slider.onmouseup = null;
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 
       // 默认，及选取清除
       ev.preventDefault();
+      ev.stopPropagation();
       this.slider.style.transitionDuration = '0s';
 
       var start = dragInfo.start;
@@ -202,15 +225,14 @@
       // 加translateZ 分量是为了触发硬件加速
       this.slider.style.transform = 
        'translateX(' +  (-(this.offsetWidth * this.offsetAll - ev.pageX+start.x)) + 'px) translateZ(0)'
-
     },
 
     _dragend: function( ev ){
-
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 
       ev.preventDefault();
+      ev.stopPropagation();
       var start = dragInfo.start;
       this._dragInfo = {};
       var pageX = ev.pageX;
@@ -218,10 +240,18 @@
       // 看走了多少距离
       var deltX = pageX - start.x;
       if( Math.abs(deltX) > this.breakPoint ){
-        this._step(deltX>0? -1: 1)
+        this._step(deltX>0? -1: 1);
       }else{
-        this._step(0)
+        this._step(0);
       }
+
+      _.delEvent(this.slider,"mousemove", this._dragmove.bind(this));
+      _.delEvent(this.slider,"mouseup", this._dragend.bind(this));
+      this.slider.removeEventListener('mousemove',this._dragmove.bind(this),true);
+      this.slider.removeEventListener('mouseup',this._dragmove.bind(this),true);
+      this.slider.onmousemove = null;
+      this.slider.onmouseup = null;
+      return false;
     },
 
     // 自动轮播相关
@@ -262,11 +292,7 @@
         // 新建一个定时器来控制启动，在指定时间后仅启动一次
         clearTimeout(newTimmer); 
         var newTimmer = setTimeout(function(){
-            i ++;
             _this._autoStart();
-            if (i === 1) {
-                clearTimeout(newTimmer);
-            }
         }, waitingTime);
       }
     }

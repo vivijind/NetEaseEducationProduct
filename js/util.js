@@ -37,6 +37,12 @@ var util = (function(){
         elem.attachEvent('on' + type, listener);
     },
 
+    // 移除事件
+    delEvent: function(elem, type, listener, useCapture) {
+      document.removeEventListener ? elem.removeEventListener(type, listener, useCapture):
+        elem.detachEvent('on' + type, listener);
+    },
+
     // 事件代理
     delegateEvent: function(element, tag, eventName, listener) {
         this.addEvent(element, eventName, function () {
