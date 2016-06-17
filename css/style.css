@@ -194,9 +194,9 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 
 /* 最热课程（滚动更新） */
 .g-sd .m-top{margin-top:20px;}
-.top-lst{position:relative;height:200px;padding: 19px 20px 22px;font:14px/16.8px "微软雅黑";}
+.top-lst{position:relative;height:678px;padding: 19px 20px 22px;font:14px/16.8px "微软雅黑";}
 .top-lst .m-slider .slide {position:absolute;top:0;left:0;height:50px;}
 .top-lst .m-slider .slide div+div{margin-top:20px;}
-.top-lst .m-slider .slide .img{width:50px;height:50px;margin-right:12px;}
+.top-lst .m-slider .slide img{width:50px;height:50px;margin-right:12px;}
 .top-lst .m-slider .slide .txt{overflow:hidden;}
 .top-lst .m-slider .slide .txt .u-participate{margin-top:13px;}

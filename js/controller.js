@@ -234,34 +234,26 @@
         this.view.render('sliderShow',pointer);
       },
       _hotCourseShow: function() {
-        var hotCourse = new SliderCourse({
-            // 轮播图片列表
-            images: [
-                "img/banner1.jpg",
-                "img/banner2.jpg",
-                "img/banner3.jpg"
-            ],
-            // 图片对应的链接列表
-            links: [
-                "http://open.163.com/",
-                "http://study.163.com/",
-                "http://www.icourse163.org/"
-            ],
+        var self = this;
+        // 获取所有最热课程列表数据
+        self.model.getHotCourse(function(data) {
+          var hotCourse = new SliderCourse({
+              // 轮播图片列表
+              courses: [].slice.call(data),
 
-            showNum: 12,
+              intervalTime: 5000,
 
-            intervalTime: 5000,
+              fadeTime: 500,
 
-            fadeTime: 500,
+              // 是否自动轮播
+              auto: true
+          });
 
-            // 是否自动轮播
-            auto: true
+          // 设置当前初始显示
+          hotCourse.nav(0);
+          // 显示
+          self.view.render('HotCourseShow',hotCourse);
         });
-
-        // 设置当前初始显示
-        hotCourse.nav(0);
-        // 显示
-        this.view.render('HotCourseShow',hotCourse);
       }
     });
 

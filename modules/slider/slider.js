@@ -41,6 +41,7 @@
     this.breakPoint = this.offsetWidth/4;
 
     this.pageNum = this.images? this.images.length : 3;
+    this.showNum = this.slides.length;
 
     // 内部数据结构
     this.slideIndex = 1;
@@ -151,7 +152,7 @@
     _normIndex: function(index, len){
       return (len + index) % len;
     },
-    _onNav(pageIndex, slideIndex) {
+    _onNav: function(pageIndex, slideIndex) {
       var linkList = this.links;
       var imgList = this.images;
       var slides = this.slides;
@@ -178,7 +179,7 @@
     },
 
     // 拖拽
-    _initDrag() {
+    _initDrag: function() {
       // 拖拽初始化
       this._dragInfo = {};
       _.addEvent(this.slider,"mousedown", this._dragstart.bind(this));
@@ -187,12 +188,12 @@
       _.addEvent(this.slider,"mouseleave", this._dragend.bind(this));
     },
 
-    _dragstart(ev) {
+    _dragstart: function(ev) {
       var dragInfo = this._dragInfo;
       dragInfo.start = {x: ev.pageX, y: ev.pageY};
     },
 
-    _dragmove(ev) {
+    _dragmove: function(ev) {
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 

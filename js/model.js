@@ -69,7 +69,7 @@
         getAllPage: function() {
             return this.data['totalPage']; 
         },
-        getHotCourse: function() {
+        getHotCourse: function(callback) {
             var self = this;
             self.store.getHotCourse(function(data){
                 callback.call(self,JSON.parse(data));
