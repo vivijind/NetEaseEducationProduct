@@ -91,8 +91,6 @@
       this.slideIndex = typeof this.slideIndex === 'number'? this.slideIndex: (pageIndex+1) % 3;
       this.offsetAll = pageIndex;
 
-      this.slider.style.transitionDuration = '0s';
-
       this._calcSlide();
     },
     // 下一页
@@ -109,7 +107,6 @@
       this.offsetAll += offset;
       this.pageIndex += offset;
       this.slideIndex += offset;
-      this.slider.style.transitionDuration = '.5s';
 
       this._calcSlide();
 
@@ -186,7 +183,6 @@
 
       // 默认，及选取清除
       ev.preventDefault();
-      this.slider.style.transitionDuration = '0s';
 
       var start = dragInfo.start;
       // 清除恼人的选区

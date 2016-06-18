@@ -187,14 +187,14 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 
 /* 指示器（轮播） */
 .m-sld .m-cursor {position:absolute;bottom:20px;left:50%;z-index:999;transform:translateX(-50%);}
-.m-sld .m-cursor li{display:inline-block;height:10px;width:10px;border-radius:10px;background-color:#fff;}
+.m-sld .m-cursor li{display:inline-block;height:10px;width:10px;border-radius:6px;background-color:#fff;}
 .m-sld .m-cursor li+li {margin-left:11px;}
 .m-sld .m-cursor li.crt{background-color:#000;}
 .m-sld .m-cursor li:hover{cursor:pointer;}
 
 /* 最热课程（滚动更新） */
 .g-sd .m-top{margin-top:20px;}
-.top-lst{position:relative;height:678px;padding: 19px 20px 22px;font:14px/16.8px "微软雅黑";}
+.top-lst{position:relative;height:680px;padding:20px;font:14px/16.8px "微软雅黑";}
 .top-lst .m-slider .slide {position:absolute;top:0;left:0;height:50px;}
 .top-lst .m-slider .slide div+div{margin-top:20px;}
 .top-lst .m-slider .slide img{width:50px;height:50px;margin-right:12px;}

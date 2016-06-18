@@ -245,6 +245,9 @@
 
               fadeTime: 500,
 
+              // 是否允许拖拽
+              drag: true,
+
               // 是否自动轮播
               auto: true
           });

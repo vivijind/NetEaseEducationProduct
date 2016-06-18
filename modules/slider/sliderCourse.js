@@ -25,12 +25,11 @@
     </div>';
 
   function SliderCourse(opt) {
-    // 将数据复制到自身实例上
-    _.extend(this,opt);
     // 继承属性，借用构造函数方法
     Slider.call(this,opt);
 
     this.pageNum = this.courses? this.courses.length : 3;
+    this.directionH = false;
   }
 
   // 继承方法
@@ -56,9 +55,9 @@
         slides[nextslideIndex].style.top = (offsetAll+i)*70 + "px";
       }
 
-      // 容器偏移
-      this.slider.style.transform = "translateY(" + (-offsetAll*100) + "%) translateZ(0px)";
-    
+      // 容器偏移——动画
+      this.slider.style.transform = "translateY(" + (-offsetAll*70) + "px) translateZ(0px)";
+
       // 给当前slideIndex添加z-active
       slides.forEach(function(node){ _.delClass(node, 'z-active') })
       _.addClass(slides[slideIndex], 'z-active');
@@ -72,7 +71,7 @@
       var slides = this.slides;
 
       // 图片下标和slide下标由0开始
-      for(var i = -1; i <= this.showNum-1; i ++) {
+      for(var i = -1; i <= this.showNum-2; i ++) {
         var index = this._getNum((slideIndex+i),this.showNum);
         var imgIndex = this._getNum((pageIndex+i),this.pageNum);
         // 根据数据更新课程  

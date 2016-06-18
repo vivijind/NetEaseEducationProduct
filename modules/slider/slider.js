@@ -37,8 +37,11 @@
     this.slides = [].slice.call(this.slider.querySelectorAll('.slide'));
 
     // 拖拽相关设置
-    this.offsetWidth = this.container.offsetWidth;
-    this.breakPoint = this.offsetWidth/4;
+    // 拖拽方向，默认为true，表示横向，false为纵向
+    this.directionH = this.directionH || true; 
+    this.offset = this.directionH? this.container.offsetWidth : this.container.offsetHeight;
+    this.breakPoint = this.offset/4;
+    
 
     this.pageNum = this.images? this.images.length : 3;
     this.showNum = this.slides.length;
@@ -46,13 +49,14 @@
     // 内部数据结构
     this.slideIndex = 1;
     this.pageIndex = this.pageIndex || 0;
+    this.offsetAll = this.pageIndex;
 
     // 动画设置
     this.fadeTime = this.fadeTime || 500;
 
     // 拖拽
     if(this.drag) {
-      // this._initDrag();
+      this._initDrag();
     }
 
     // 轮播，并响应鼠标移动上去暂停轮播事件
@@ -97,8 +101,10 @@
     },
     // 单步移动
     _step: function(offset){
+      this.offsetAll += offset;
       this.pageIndex += offset;
       this.slideIndex += offset;
+
       this.slider.style.transitionDuration = '.5s';
 
       this._calcSlide();
@@ -210,8 +216,8 @@
       }
 
       // 加translateZ 分量是为了触发硬件加速
-      this.slider.style.transform = 
-       'translateX(' +  (-(this.offsetWidth * this.offsetAll - ev.pageX+start.x)) + 'px) translateZ(0)'
+      this.slider.style.transform = this.directionH? 'translateX(': 'translateY('
+        +  (-(this.offset * this.offsetAll - ev.pageX+start.x)) + 'px) translateZ(0)'
 
     },
 
@@ -223,12 +229,18 @@
       ev.preventDefault();
       var start = dragInfo.start;
       this._dragInfo = {};
-      var pageX = ev.pageX;
+      var pageX = ev.pageX,
+          pageY = ev.pageY;
 
-      // 看走了多少距离
-      var deltX = pageX - start.x;
-      if( Math.abs(deltX) > this.breakPoint ){
-        this._step(deltX>0? -1: 1)
+      // 看走了多少距离_根据拖拽方向判断
+      var delt = pageX - start.x;
+      if (!this.directionH) {
+          // 如果非横向，则为纵向
+          delt = pageY - start.y;
+      }
+      
+      if( Math.abs(delt) > this.breakPoint ){
+        this._step(delt>0? -1: 1)
       }else{
         this._step(0)
       }
