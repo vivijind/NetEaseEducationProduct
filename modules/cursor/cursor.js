@@ -15,10 +15,8 @@
 		// 将options 复制到 组件实例上，让options.content等于this.content，这样使用比较简单
 	    _.extend(this, options);
 
-		// 容器节点，如果没有传入container，默认为body节点，
-	    this.container = this.container || document.body;
 	    // cursor节点
-	    this.cursorNode = this._layout.cloneNode(true);
+	    this.cursor = this._layout.cloneNode(true);
 
 	    // 总共的指示器数量
         this.dataNum = this.cursorData.length;
@@ -32,12 +30,12 @@
 
 		// 将后续经常用到的节点放在实例上，避免查找开销
 		// 指示器节点
-		this.cursors = _.$qsa('.m-cursor .cursor',this.cursorNode);
+		this.cursors = _.$qsa('.m-cursor .cursor',this.cursor);
 		if (this.prevData) {
-			this.prev = _.$qs('.m-cursor .prev',this.cursorNode);
+			this.prev = _.$qs('.m-cursor .prev',this.cursor);
 		}
         if (this.nextData) {
-        	this.next = _.$qs('.m-cursor .next',this.cursorNode);
+        	this.next = _.$qs('.m-cursor .next',this.cursor);
         }
 
         // 当前选中项
@@ -60,9 +58,10 @@
 
 		// 和容器绑定显示接口
 		show: function(container) {
-			this.container = container || this.container;
+			// 容器节点，如果没有传入container，默认为body节点
+			this.container = container || this.container || document.body;
 			// 初始化，给外部容器增加指示器组件
-    		this.container.appendChild(this.cursorNode);
+    		this.container.appendChild(this.cursor);
 		},
 
 		// 前一个
@@ -181,13 +180,13 @@
 			if (this.nextData) {
 				template += "<li class='next' data-index='next'>" + this.nextData + "</li>";
 			}
-			this.cursorNode.innerHTML = template;
+			this.cursor.innerHTML = template;
 		},
 
 		// 事件初始化
 		_initEvent: function() {
 			// 使用事件代理绑定click事件
-	        _.delegateEvent(this.cursorNode, 'li', 'click', this._select.bind(this));
+	        _.delegateEvent(this.cursor, 'li', 'click', this._select.bind(this));
 		}
 	});
 

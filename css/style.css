@@ -37,7 +37,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .g-hd{height:845px;}
 .g-bd{overflow:hidden;background-color:#f8f8f8;}
 .g-bd .g-mbd{height:1470px;width:1205px;margin:0 auto;}
-.g-bd .g-mbd .g-mn{margin-right:223px;}
+.g-bd .g-mbd .g-mn{margin-right:243px;}
 .g-bd .g-mbd .g-sd{width:223px;}
 .g-ft{height:262px;background-color:#333;color:#fff;}
 
@@ -52,7 +52,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .m-nav{height:56px;margin:33px auto 0 auto;max-width:1205px;}
 .m-nav *{display:table-cell;}
 .m-nav .nav-info .title{padding:0 30px 0 6px;font:22px/20px "黑体";}
-.m-nav .nav-info .concern{width:54px;height:22px;line-height:20px;background-color:#21a557;border-radius:2px;color:#fff;}
+.m-nav .nav-info .concern{width:54px;height:21px;line-height:20px;background-color:#21a557;border-radius:2px;color:#fff;}
 .m-nav .nav-info .concern:hover{background-color:#2fb556;cursor:pointer;}
 .m-nav .nav-info .concern .icon{display:inline-block;width:8px;height:8px;margin:0 5px 0 9px;background:url(../img/icon.png) no-repeat;background-position:-266px 0;}
 .m-nav .nav-info .fans{padding-left:14px;}
@@ -64,7 +64,6 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .m-nav .nav-info .concernd span{margin:0 8px;color:#ccc;}
 .m-nav .nav-info .concernd a{color:#999;}
 .m-nav .nav-info .concernd a:hover{text-decoration:underline;color:#21a557;}
-
 
 .nav-link li+li{padding-left:55px}
 .nav-link li:last-child{padding-right:30px;}
@@ -117,7 +116,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .g-mbd .g-mn .lst .m-course .course-wrap .course-details p{display:table-cell;vertical-align:middle;font:14px/24px "微软雅黑";}
 
 /* 侧栏 */
-.g-sd>div,.sdtt{border-bottom:1px solid #ddd;width:223px;}
+.g-sd>div,.sdtt{width:223px;border-bottom:1px solid #ddd;}
 .g-sd .m-video{height:230px;}
 .g-sd .m-video,.m-top{box-shadow: 0 1px 0 1px #ecebeb;}
 .g-sd .sdtt{height:54px;padding-left:20px;font:16px/22px "微软雅黑";}
@@ -145,24 +144,25 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 /* media */
 /* 1205宽度页面布局动态适应 */
 @media screen and (max-width:1205px){
-    .g-bd{min-width:960px;}
-    .g-tips .m-tips,.m-nav,.m-ct,.g-bd .g-mbd{width:960px;}
-    .g-ft{min-width:980px;}
+	/* 为了显示左右阴影，设置为最小宽度加2px（左右阴影） */
+	.g-hd,.g-bd,.g-tips{min-width:962px;}
+    .g-tips .m-tips,.m-nav,.m-ct,.g-bd .g-mbd{width:962px;}
+    .g-ft{min-width:962px;}
 }
 
 /* 登录弹窗 */
 .m-modal .modal_mask{position:fixed;top:0;left:0;z-index:99;width:100%;height:100%;background-color:rgba(50,50,50,0.8);}
-.m-modal .modal_wrap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;width:386px;height:288px;padding-left:40px;box-sizing:border-box;background-color:#fff;font:12px/12px "微软雅黑";}
+.m-modal .modal_wrap{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;width:386px;padding-left:40px;box-sizing:border-box;background-color:#fff;font:12px/12px "微软雅黑";}
 .m-modal .modal_cancel{position:absolute;top:10px;right:8px;width:10px;height:10px;background:url(../img/icon.png) no-repeat;background-position:-280px -31px;}
 .m-modal .modal_cancel:hover{cursor:pointer;}
-.m-modal .modal_head{margin-top:20px;}
-.m-modal .modal_head{font:18px/28px "微软雅黑";}
-.m-modal .modal_body{margin-top:20px;}
+.m-modal .modal_head{margin-top:20px;font:18px/28px "微软雅黑";}
+.m-modal .modal_body{margin-top:20px;margin-bottom:32px;}
 .m-modal .modal_body input{width:295px;height:45px;border:1px solid #dfdfdf;box-shadow:1px 1px 0 1px #f1f1f1 inset;font:16px/28px "微软雅黑";text-indent:11px;}
 .m-modal .modal_body input+input{margin-top:15px;}
-.m-modal .modal_foot{margin-top:29px;}
-.m-modal .modal_foot .login{width:293px;height:46px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;letter-spacing:3px;font:16px/46px "微软雅黑";}
-.m-modal .modal_message{display:none;margin-top:5px;}
+.m-modal .modal_body button{width:293px;height:46px;margin-top:29px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;letter-spacing:3px;font:16px/46px "微软雅黑";}
+.m-modal .modal_body .form-tip{display:none;margin-bottom:10px;}
+.m-modal .modal_body .form-tip.success{color:#0f0;}
+.m-modal .modal_body .form-tip.fail{color:#f00;}
 
 /* 指示器（翻页器） */
 .g-mbd{position:relative;}
@@ -178,8 +178,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 /* 轮播图  */
 .m-sld{position:relative;left:50%;transform:translateX(-50%);height:460px;width:100%;overflow:hidden;}
 /* 轮播组件 */
-.m-sld .m-slider {position:relative;}
-.m-sld .m-slider, .m-slider .slide {width:100%;height:100%;}
+.m-sld .m-slider, .m-slider .slide {width:100%;height:100%;min-width:1205px;}
 .m-sld .m-slider .slide {position:absolute;top:0;left:0;}
 .m-sld .m-slider .slide.z-active{z-index:99;}
 .m-sld .m-slider .slide a:hover{cursor:pointer;}
@@ -194,9 +193,9 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 
 /* 最热课程（滚动更新） */
 .g-sd .m-top{margin-top:20px;}
-.top-lst{position:relative;height:680px;padding:20px;font:14px/16.8px "微软雅黑";}
+.top-lst{position:relative;height:680px;padding:20px;font:14px/16.8px "微软雅黑";overflow:hidden;}
 .top-lst .m-slider .slide {position:absolute;top:0;left:0;height:50px;}
 .top-lst .m-slider .slide div+div{margin-top:20px;}
 .top-lst .m-slider .slide img{width:50px;height:50px;margin-right:12px;}
-.top-lst .m-slider .slide .txt{overflow:hidden;}
+.top-lst .m-slider .slide .txt h5{width:121px;}
 .top-lst .m-slider .slide .txt .u-participate{margin-top:13px;}

@@ -140,10 +140,10 @@
                     parameter.show(self.$cursor);
                 },
                 sliderShow: function() {
-                    parameter.show(self.$slider);
+                    self.$slider.appendChild(parameter);
                 },
                 HotCourseShow: function() {
-                    parameter.show(self.$hotCourse);
+                    self.$hotCourse.appendChild(parameter);
                 }
             };
 

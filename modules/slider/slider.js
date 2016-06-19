@@ -13,8 +13,6 @@
  *      -------------------
  */
 
-// 还未解决点击click和拖拽问题，暂不支持拖拽事件
-
 // 立即执行，传入util，使用一些通用函数接口
 ;(function(_){
   var template = 
@@ -50,6 +48,7 @@
     this.slideIndex = 1;
     this.pageIndex = this.pageIndex || 0;
     this.offsetAll = this.pageIndex;
+    this.isDragging = false;
 
     // 动画设置
     this.fadeTime = this.fadeTime || 500;
@@ -75,7 +74,8 @@
 
     // 和容器绑定显示接口
     show: function(container) {
-      this.container = container || this.container;
+      // 容器节点，如果没有传入container，默认为body节点
+      this.container = container || this.container || document.body;
       // 初始化，给外部容器增加指示器组件
       this.container.appendChild(this.slider);
       this.container.style.overflow = 'hidden';
@@ -123,14 +123,14 @@
       slides[prevslideIndex].style.opacity = 1;
       slides[nextslideIndex].style.opacity = 0;
 
+      this._fadeIn(slides[slideIndex]);
+
       // 给当前slideIndex添加z-active
-      slides.forEach(function(node){ _.delClass(node, 'z-active') })
+      slides.forEach(function(node){ _.delClass(node, 'z-active') });
       _.addClass(slides[slideIndex], 'z-active');
 
       // 图片url处理
       this._onNav(this.pageIndex, this.slideIndex);
-
-      this._fadeIn(slides[slideIndex]);
     },
 
     // 淡入效果
@@ -154,10 +154,7 @@
     _getNum: function(index, len) {
       return (index + len)%len;
     },
-    // 标准化下标
-    _normIndex: function(index, len){
-      return (len + index) % len;
-    },
+
     _onNav: function(pageIndex, slideIndex) {
       var linkList = this.links;
       var imgList = this.images;
@@ -216,7 +213,7 @@
       }
 
       // 加translateZ 分量是为了触发硬件加速
-      this.slider.style.transform = this.directionH? 'translateX(': 'translateY('
+      this.slider.style.transform = (this.directionH? 'translateX(': 'translateY(')
         +  (-(this.offset * this.offsetAll - ev.pageX+start.x)) + 'px) translateZ(0)'
 
     },
@@ -237,6 +234,12 @@
       if (!this.directionH) {
           // 如果非横向，则为纵向
           delt = pageY - start.y;
+      }
+
+      if (delt === 0) {
+        this.isDragging = false;
+      } else {
+        this.isDragging = true;
       }
       
       if( Math.abs(delt) > this.breakPoint ){

@@ -102,20 +102,62 @@
       _loginShow: function(login) {
         var self = this;
         if (!login) {  // 未设置登录cookie，需要登录，弹出登录框
-          var modal = new Modal();
+          // 构建登陆框提交表单
+          var loginData = {
+              data: [
+                {
+                  tag: 'input', // 表单类型
+                  validator: function (userName) {
+                    if (userName === '') {
+                      return false;
+                    } else {
+                      return true;
+                    }
+                  },
+                  rules: '账号',    // 填写规则提示
+                  fail: '账号必填，提示：studyOnline'               // 验证失败提示
+                },
+                {
+                  tag: 'input',
+                  type: 'password',                   // 表单类型
+                  validator: function (password) {
+                    if (password === '') {
+                      return false;
+                    } else {
+                      return true;
+                    }
+                  },
+                  rules: '密码',    // 填写规则提示
+                  fail: '密码必填，提示：study.163.com'               // 验证失败提示
+                },
+                {
+                  tag: 'button',
+                  text: '登录'
+                }
+              ],
+            submitSuccess: '登录成功',
+            submitFail: '登录失败'
+          };
+
+          var formLogin = new Form(loginData);
+          var modal = new Modal({title:"登录网易云课堂"});
 
           // 注册事件
-          modal.on("login", function(userName,password,callback){
-              self._login(userName,password,function(value){
-                callback(value);
+          formLogin.on("submit",function(result,callback) {
+            self._login(result,function(success){
+                callback(success);
+                if (success) {
+                  modal.hide();
+                }
               });
           });
+
           modal.on("cancel", function(){
               self._loginFailed();
           });
-
           // 调用
-          modal.show("<h3>弹窗</h3");
+          modal.show(formLogin.form);
+
         } else { // 已设置登录cookie
           self._loginSucess();
         }
@@ -127,15 +169,17 @@
             self.view.render('concern',concerned);
         });
       },
-      _login: function(userName,password,callback) {
+      _login: function(result,callback) {
         var self = this;
+        var userName = result[0];
+        var password = result[1];
         self.model.login(userName,password,function(isLogin){
           if (isLogin === '1') {
-            self._loginSucess();
             callback(true);
+            self._loginSucess();
           } else {
-            self._loginFailed();
             callback(false);
+            self._loginFailed();
           }
         });
       },
@@ -206,7 +250,7 @@
             fadeTime: 500,
 
             // 是否自动轮播
-            auto: false
+            auto: true
         });
 
         // 轮播对应的cursor组件
@@ -230,8 +274,8 @@
         // 设置当前初始显示页
         slider.nav(0);
         // 显示
-        this.view.render('sliderShow',slider);
-        this.view.render('sliderShow',pointer);
+        this.view.render('sliderShow',slider.slider);
+        this.view.render('sliderShow',pointer.cursor);
       },
       _hotCourseShow: function() {
         var self = this;
@@ -255,7 +299,7 @@
           // 设置当前初始显示
           hotCourse.nav(0);
           // 显示
-          self.view.render('HotCourseShow',hotCourse);
+          self.view.render('HotCourseShow',hotCourse.slider);
         });
       }
     });
