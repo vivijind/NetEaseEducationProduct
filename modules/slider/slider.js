@@ -32,7 +32,7 @@
 
     // slider节点，并转换为数组
     this.slider = this._layout.cloneNode(true);
-    this.slides = [].slice.call(this.slider.querySelectorAll('.slide'));
+    this.slides = _.$qsa('.slide',this.slider);
 
     // 拖拽相关设置
     // 拖拽方向，默认为true，表示横向，false为纵向
@@ -163,8 +163,8 @@
       // 图片下标和slide下标由0开始
       for(var i = -1; i <= this.showNum-1; i ++) {
         var index = this._getNum((slideIndex+i),this.showNum);
-        var imglink = slides[index].querySelector("a");
-        var img = slides[index].querySelector("img"); // 当前img结点
+        var imglink = _.$qs("a",slides[index]);
+        var img = _.$qs("img",slides[index]);; // 当前img结点
         if(!img) {
           img = document.createElement("img");
           imglink = document.createElement("a");
@@ -201,7 +201,7 @@
       if(!dragInfo.start) return;
 
       // 默认，及选取清除
-      ev.preventDefault();
+      _.preventDefault(ev);
       this.slider.style.transitionDuration = '0s';
 
       var start = dragInfo.start;
@@ -223,7 +223,7 @@
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 
-      ev.preventDefault();
+      _.preventDefault(ev);
       var start = dragInfo.start;
       this._dragInfo = {};
       var pageX = ev.pageX,
@@ -255,8 +255,8 @@
       this.startAgain = false;
       this.autoStart();
 
-      this.slider.addEventListener("mouseover", this._autoEnd.bind(this));
-      this.slider.addEventListener("mouseout", this._autoStart.bind(this));
+      _.addEvent(this.slider,"mouseover", this._autoEnd.bind(this));
+      _.addEvent(this.slider,"mouseout", this._autoStart.bind(this));
     },
     _autoStart: function() {
       var time = this.intervalTime;

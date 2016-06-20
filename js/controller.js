@@ -197,7 +197,7 @@
       // 登录成功
       _loginSucess: function() {
         var self = this;
-        console.log("登录成功");
+        // console.log("登录成功");
         self.model.loginSuccess();
         // 关注
         self.model.attention(function(){
@@ -206,7 +206,7 @@
       },
       // 登录失败
       _loginFailed: function() {
-        console.log("登录失败");
+        // console.log("登录失败");
         // 取消关注
         this._concernShow(false);
       },

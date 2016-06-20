@@ -85,7 +85,7 @@
 
 		_select: function() {
 			var target = _.getTarget(event);
-			var index = target.dataset.index;
+			var index = _.getDataset(target,'index');
 			if (index === "more") {
 				return;
 			} else if(index === "prev") {
@@ -124,13 +124,13 @@
 				if(dataNum > cursorNum && 
 					((i===1 && selIndex >= middleIndex) || 
 						(i===(cursorNum-2) && selIndex<(dataNum-middleIndex-1)))) {
-					cursor.dataset.index = "more";
-					cursor.innerHTML = "...";
+					_.setDataset(cursor,'index','more');
+					cursor.innerHTML = '...';
 					_.addClass(cursor,'disabled');
 					_.delClass(cursor,'crt');
 					needUpdate = true;
 				} else if( i!==0 && i!==(cursorNum-1)) {
-					var index = parseInt(cursor.dataset.index);
+					var index = parseInt(_.getDataset(cursor,'index'));
 					if (!index && index !== 0) {
 						needUpdate = true;
 					}
@@ -144,7 +144,7 @@
 					}
 
 					if (needUpdate) {
-						cursor.dataset.index = index;
+						_.setDataset(cursor,'index',index);
 						cursor.innerHTML = this.cursorData[index];
 						_.delClass(cursor,'disabled');
 					}
