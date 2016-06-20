@@ -16,7 +16,6 @@
     	_.extend(this,opt);
 
 	    this.form = this._layout.cloneNode(true);
-	    this.formChild = this.form.children;
 	    this.formTip = _.$qs(".form-tip",this.form);
 	    // 初始去除消息显示
 		this.formTip.style.display = "none";
@@ -44,20 +43,20 @@
 		onSubmit: function() {
 			var self = this;
 			var event = arguments[0] || window.event;
-			event.preventDefault();
+			_.preventDefault(event);
 
 			var result = [],
 				errorTip = "";
 
 			// 先进行所有的验证，获得提交数据
-			for (var i = 1; i < self.formChild.length; i++) {
-				if (self._validator.call(self,i-1)) {
-					result.push(self.formChild[i].value);
+			for (var i = 0; i < self.forms.length; i++) {
+				if (self._validator.call(self,i)) {
+					result.push(self.forms[i].value);
 				} else {
-					if (i !== 1) {
+					if (i !== 0) {
 						errorTip += "<br/>";
 					}
-					errorTip += self.data[i-1].fail;
+					errorTip += self.data[i].fail;
 				}
 			}
 
@@ -85,8 +84,8 @@
 	    	self.data.forEach(function(data,index) {
 	    		self._formFactory(data,index);
 	    	});
-
-	    	this.forms = [].slice.call(self.formChild,1);
+	    	
+	    	this.forms = _.$qsa(".form",this.form);
 	    	// 初始化事件
 	    	self._initEvent();
 	    },
@@ -109,7 +108,7 @@
 	    	if (data.rules) {
 	    		formdata.placeholder = data.rules;
 	    	}
-	    	formdata.dataset.index = index;
+	    	_.addClass(formdata,"form");
 	    	this.form.appendChild(formdata);
 	    },
 
@@ -129,7 +128,7 @@
 				return true;
 			}
 			var valid = this.data[index].validator,
-				target = this.formChild[index+1];
+				target = this.forms[index];
 			if (valid(target.value)) {
 				// 验证成功
 				if (this.data[index].success) {

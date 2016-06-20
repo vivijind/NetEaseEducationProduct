@@ -201,7 +201,7 @@
       if(!dragInfo.start) return;
 
       // 默认，及选取清除
-      ev.preventDefault();
+      _.preventDefault(ev);
       this.slider.style.transitionDuration = '0s';
 
       var start = dragInfo.start;
@@ -223,7 +223,7 @@
       var dragInfo = this._dragInfo;
       if(!dragInfo.start) return;
 
-      ev.preventDefault();
+      _.preventDefault(ev);
       var start = dragInfo.start;
       this._dragInfo = {};
       var pageX = ev.pageX,
@@ -255,8 +255,8 @@
       this.startAgain = false;
       this.autoStart();
 
-      this.slider.addEventListener("mouseover", this._autoEnd.bind(this));
-      this.slider.addEventListener("mouseout", this._autoStart.bind(this));
+      _.addEvent(this.slider,"mouseover", this._autoEnd.bind(this));
+      _.addEvent(this.slider,"mouseout", this._autoStart.bind(this));
     },
     _autoStart: function() {
       var time = this.intervalTime;

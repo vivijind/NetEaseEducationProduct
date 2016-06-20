@@ -50,7 +50,6 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .m-tips .tips-cl a:before{content:'';display:inline-block;width:10px;height:10px;margin-right:6px;background:url(../img/icon.png) no-repeat;background-position:-252px -30px;}
 
 /* 顶部导航 */
-
 .m-nav{height:56px;margin:33px auto 0 auto;max-width:1205px;}
 .m-nav *{display:table-cell;}
 .m-nav .nav-info{margin-left:2px;}
@@ -70,9 +69,9 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 
 .m-nav .nav-link{margin-right:15px;}
 .m-nav .nav-link li+li{padding-left:55px}
-.m-nav .nav-link li:last-child{padding-right:30px;}
+.m-nav .nav-link li.last{padding-right:30px;}
 .m-nav .nav-link li a:hover{color:#39a030}
-.m-nav .nav-link .sch{width:19px;height:19px;background:url(../img/icon.png) no-repeat;background-position:-250px -55px;}
+.m-nav .nav-link .sch{vertical-align:middle;width:19px;height:19px;background:url(../img/icon.png) no-repeat;background-position:-250px -55px;}
 .m-nav .nav-link .sch:hover{background-position:-273px -55px;cursor:pointer;}
 
 /* 内容区产品 */
@@ -96,7 +95,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 /* 课程内容 */
 /* tab */
 .g-mbd .g-mn .tab{font:20px/22px "微软雅黑";color:#666;}
-.g-mbd .g-mn .tab li{display:table-cell;vertical-align:middle;text-align:center;width:200px;height:50px;border-bottom:1px solid #ddd;box-shadow: 0 1px 0 1px #ecebeb;}
+.g-mbd .g-mn .tab li{display:table-cell;vertical-align:middle;text-align:center;width:200px;height:50px;border-bottom:1px solid #ddd;border:1px solid #ecebeb;border-top:0;box-shadow: 0 1px 0 1px #ecebeb;}
 .g-mbd .g-mn .tab li.sel{background-color:#39a030;color:#fff;}
 .g-mbd .g-mn .tab li:hover{cursor:pointer;}
 /* 课程 */
@@ -121,7 +120,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 /* 侧栏 */
 .g-sd>div,.sdtt{width:223px;border-bottom:1px solid #ddd;}
 .g-sd .m-video{height:230px;}
-.g-sd .m-video,.m-top{box-shadow: 0 1px 0 1px #ecebeb;}
+.g-sd .m-video,.m-top{border:1px solid #ecebeb;border-top:0;box-shadow: 0 1px 0 1px #ecebeb;}
 .g-sd .sdtt{height:54px;padding-left:20px;font:16px/22px "微软雅黑";}
 .g-sd .video-show{padding:18px 0 0 22px;height:132px;font-size:14px;}
 .g-sd .video-show .video{text-align:center;display:table-cell;vertical-align:middle;width:180px;height:110px;margin-top:9px;background-image:url(../img/video.png);}
@@ -195,7 +194,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 
 /* 最热课程（滚动更新） */
 .g-sd .m-top{margin-top:20px;}
-.top-lst{position:relative;height:680px;padding:20px;font:14px/16.8px "微软雅黑";overflow:hidden;}
+.top-lst{position:relative;height:680px;margin:20px;font:14px/16.8px "微软雅黑";overflow:hidden;}
 .top-lst .m-slider .slide {position:absolute;top:0;left:0;height:50px;}
 .top-lst .m-slider .slide div+div{margin-top:20px;}
 .top-lst .m-slider .slide img{width:50px;height:50px;margin-right:12px;}
