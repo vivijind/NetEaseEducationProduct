@@ -1,4 +1,29 @@
 (function () {
+  // cors跨域请求兼容性处理
+  function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+
+      // Check if the XMLHttpRequest object has a "withCredentials" property.
+      // "withCredentials" only exists on XMLHTTPRequest2 objects.
+      xhr.open(method, url, true);
+
+    } else if (typeof XDomainRequest != "undefined") {
+
+      // Otherwise, check if XDomainRequest.
+      // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+      xhr = new XDomainRequest();
+      xhr.open(method, url);
+
+    } else {
+
+      // Otherwise, CORS is not supported by the browser.
+      xhr = null;
+
+    }
+    return xhr;
+  }
+
 	/**
 	 * Cookie用于对页面cookie进行管理和操作，提供加密功能
 	 */
@@ -67,7 +92,11 @@
           return pairs.join('&');
       },
       get: function (url, options, callback) {
-          var xhr = new XMLHttpRequest();     //创建XHR对象
+          var URL = url +'?'+ this.serialize(options);  //url+查询参数序列号结果 
+          var xhr = createCORSRequest('GET', URL);  //创建XHR对象
+          if (!xhr) {
+            throw new Error('CORS not supported');
+          }
           // 处理返回数据
           xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {      //浏览器结束请求
@@ -79,13 +108,15 @@
                   }
               }
           }
-          var URL = url +'?'+ this.serialize(options);     //url+查询参数序列号结果 
-          xhr.open('get', URL, true);
+
           xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); //放在open后执行，表示文本内容的编码方式是URL编码，即除了标准字符外，每字节以双字节16进制前加个“%”表示
           xhr.send(null);
       },
       post: function (url, options, callback) {
-          var xhr = new XMLHttpRequest();     //创建XHR对象
+          var xhr = createCORSRequest('GET', URL);  //创建XHR对象
+          if (!xhr) {
+            throw new Error('CORS not supported');
+          }
           // 处理返回数据
           xhr.onreadystatechange = function() {
               if (xhr.readyState == 4) {      //浏览器结束请求
@@ -97,7 +128,6 @@
                   }
               }
           }
-          xhr.open('post', url, true);
           xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); //放在open后执行，表示文本内容的编码方式是URL编码，即除了标准字符外，每字节以双字节16进制前加个“%”表示
           xhr.send(this.serialize(options));
       }

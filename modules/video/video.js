@@ -7,7 +7,7 @@
 	// 表单 主体html模板
 	var template = 
 	'<div clas="m-video">\
-			<video class="video"></video>\
+			<video class="video">浏览器不兼容该video播放，请升级浏览器或更换chrome等其他浏览器</video>\
 	    </div>';
 
 	 //表单验证工厂
