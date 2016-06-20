@@ -50,6 +50,11 @@
           self.model.setCourse(pageNo,psize,type);
           self.updateCourse(self._updateCursor);
         });
+
+        self.view.bind('videoShow', function() {
+          self.videoShow();
+        });
+        
     	},
       /* /和view层事件绑定 */
 
@@ -93,6 +98,12 @@
         self.view.render('tabChange');
         self.updateCourse(function() {
           this._updateCursor();
+        });
+      },
+      videoShow: function() {
+        var self = this;
+        self.model.getVideoUrl(function(src){
+          self._videoShow.call(self,src);
         });
       }
     });
@@ -301,6 +312,22 @@
           // 显示
           self.view.render('HotCourseShow',hotCourse.slider);
         });
+      },
+      _videoShow: function(src) {
+        var self = this;
+        var video = new Video({
+          src: src,
+          width: 889,
+          height: 567,
+          controls: true
+        });
+
+        var videomodal = new Modal({title:"请观看下列视频"});
+        videomodal.on("cancel", function(){
+            self.view.render("cancelVideo");
+        });
+        // 调用
+        videomodal.show(video.video);
       }
     });
 

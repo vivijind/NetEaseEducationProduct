@@ -74,6 +74,9 @@
             self.store.getHotCourse(function(data){
                 callback.call(self,JSON.parse(data));
             });
+        },
+        getVideoUrl: function(callback) {
+            this.store.videoUrl(callback);
         }
 	});
 

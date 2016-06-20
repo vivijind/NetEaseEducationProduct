@@ -39,6 +39,11 @@
         // 热门课程
         this.$hotCourse = _.$qs('.g-sd .top-lst');
 
+        // 介绍视频
+        this.$video = _.$qs('.video-show .video');
+        this.$videoIcon = _.$qs('.play',this.$video);
+        
+
         // 浏览器宽度
         this.width = document.body.clientWidth;
         this.type = 10;
@@ -95,6 +100,11 @@
                         self._getCourseValue(handler);
                     }
                 }
+            } else if (event === "videoShow") {
+                _.addEvent(self.$video, 'click', function() {
+                    self.$videoIcon.style.display = "none";
+                    handler();
+                });
             }
         },
         render: function (viewCmd, parameter) {
@@ -144,6 +154,9 @@
                 },
                 HotCourseShow: function() {
                     self.$hotCourse.appendChild(parameter);
+                },
+                cancelVideo: function() {
+                    self.$videoIcon.style.display = "block";
                 }
             };
 

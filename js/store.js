@@ -115,7 +115,7 @@
   	},
   	removeCookie: function(name,callback) {
   		this._removeCookie(name);
-          callback.call(this);
+      callback.call(this);
   	},
 
     // 前后端交互接口
