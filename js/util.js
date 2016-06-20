@@ -22,19 +22,25 @@ var util = (function(){
     $qs: function (selector, scope) {
       if (document.querySelector && scope?scope.querySelector:true) try {
           return (scope || document).querySelector(selector);
-      } catch (e) {}
+      } catch (e) {
+          alert("获取节点失败，可能当前浏览器不支持！");
+      }
     },
 
     $qsa: function( selector, scope ){
       if (document.querySelectorAll && scope?scope.querySelectorAll:true) try {
           return [].slice.call((scope || document).querySelectorAll(selector));
-      } catch (e) {}
+      } catch (e) {
+        alert("获取节点失败，可能当前浏览器不支持！");
+      }
     },
 
     $gt: function(selector, scope) {
       if (document.querySelector && scope?scope.querySelector:true) try {
           return [].slice.call((scope || document).getElementsByTagName(selector));
-      } catch (e) {}
+      } catch (e) {
+        alert("获取节点失败，可能当前浏览器不支持！");
+      }
     },
 
     // 根据id获取元素

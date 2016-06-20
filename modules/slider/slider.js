@@ -32,7 +32,7 @@
 
     // slider节点，并转换为数组
     this.slider = this._layout.cloneNode(true);
-    this.slides = [].slice.call(this.slider.querySelectorAll('.slide'));
+    this.slides = _.$qsa('.slide',this.slider);
 
     // 拖拽相关设置
     // 拖拽方向，默认为true，表示横向，false为纵向
@@ -163,8 +163,8 @@
       // 图片下标和slide下标由0开始
       for(var i = -1; i <= this.showNum-1; i ++) {
         var index = this._getNum((slideIndex+i),this.showNum);
-        var imglink = slides[index].querySelector("a");
-        var img = slides[index].querySelector("img"); // 当前img结点
+        var imglink = _.$qs("a",slides[index]);
+        var img = _.$qs("img",slides[index]);; // 当前img结点
         if(!img) {
           img = document.createElement("img");
           imglink = document.createElement("a");
