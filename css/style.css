@@ -33,7 +33,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 /* 布局 */
 .g-tips,.g-hd,.g-bd,.g-ft{width:100%;min-width:962px;}
 .g-tips{position:relative;height:36px;background-color:#f3f3f3;}
-.g-hd{height:845px;}
+.g-hd{height:845px;overflow:hidden;}
 .g-bd{overflow:hidden;background-color:#f8f8f8;}
 .g-bd .g-imglst{position:relative;left:50%;height:220px;width:1620px;margin:0 0 81px -814px;}
 .g-bd .g-mbd{height:1470px;width:1205px;margin:0 auto;}
@@ -75,7 +75,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .m-nav .nav-link .sch:hover{background-position:-273px -55px;cursor:pointer;}
 
 /* 内容区产品 */
-.m-ct{height:176px;margin:61px auto;max-width:1205px;}
+.m-ct{margin:61px auto;max-width:1205px;}
 .m-ct .ct-lst{margin-left:-80px;}
 .m-ct .ct-lst li{float:left;width:33.33%;padding-left:80px;-moz-box-sizing:border-box;box-sizing:border-box;}
 .m-ct .ct-lst .icon{width:80px;height:80px;margin:6px 0 0 2px;background:url(../img/icon.png) no-repeat;padding-bottom:-25px;}
@@ -195,6 +195,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 /* 最热课程（滚动更新） */
 .g-sd .m-top{margin-top:20px;}
 .top-lst{position:relative;height:680px;margin:20px;font:14px/16.8px "微软雅黑";overflow:hidden;}
+.top-lst .m-slider.hotcourse {height:680px;}
 .top-lst .m-slider .slide {position:absolute;top:0;left:0;height:50px;}
 .top-lst .m-slider .slide div+div{margin-top:20px;}
 .top-lst .m-slider .slide img{width:50px;height:50px;margin-right:12px;}

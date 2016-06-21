@@ -169,13 +169,13 @@
                         nav.style.width = "962px";
                         ct.style.width = "962px";
                         mbd.style.width = "962px";
-                        sld.style.margin = "auto auto auto -602px;";
+                        sld.style.marginLeft = "-602px;";
                     } else {
-                        tips.style.width = "100%";
+                        tips.style.width = "1205px";
                         nav.style.width = "100%";
                         ct.style.width = "100%";
-                        mbd.style.width = "100%";
-                        sld.style.margin = "auto auto auto -50%";
+                        mbd.style.width = "1205px";
+                        sld.style.marginLeft = "-50%";
                     }
                 }
             };

@@ -53,8 +53,8 @@
 
         self.view.bind('resize', function(pageNo,psize,type) {
           // ie8兼容性处理
-          if(this.isIE8){//这里是重点，你懂的
-            this._ie8set(); 
+          if (self.isIE8) {
+            self._ie8set(); 
           }
           self.model.setCourse(pageNo,psize,type);
           self.updateCourse(self._updateCursor);

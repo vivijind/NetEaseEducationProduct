@@ -30,6 +30,9 @@
 
     this.pageNum = this.courses? this.courses.length : 3;
     this.directionH = false;
+
+    // ie8 transform兼容处理
+    this.ie8 = navigator.userAgent.indexOf("MSIE 8.0")>0? true: false;
   }
 
   // 继承方法
@@ -55,8 +58,13 @@
         slides[nextslideIndex].style.top = (offsetAll+i)*70 + "px";
       }
 
-      // 容器偏移——动画
-      this.slider.style.transform = "translateY(" + (-offsetAll*70) + "px) translateZ(0px)";
+      
+      if (this.ie8) {
+        this.slider.style.marginTop = (-offsetAll*70) + "px";
+      } else {
+        // 容器偏移——动画
+        this.slider.style.transform = "translateY(" + (-offsetAll*70) + "px) translateZ(0px)";
+      }
 
       // 给当前slideIndex添加z-active
       slides.forEach(function(node){ _.delClass(node, 'z-active') })
