@@ -49,6 +49,9 @@
 		    if (this.controls) {
 		    	videoNode.controls = "controls";
 		    }
+		    if (this.poster) {
+		    	videoNode.poster = this.poster;
+		    }
 
 	    	// 初始化事件
 	    	this._initEvent();

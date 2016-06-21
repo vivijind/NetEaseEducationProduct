@@ -160,7 +160,10 @@
           };
 
           var formLogin = new Form(loginData);
-          var modal = new Modal({title:"登录网易云课堂"});
+          var modal = new Modal({
+            title:"登录网易云课堂",
+            name: "login"
+          });
 
           // 注册事件
           formLogin.on("submit",function(result,callback) {
@@ -326,12 +329,16 @@
         var self = this;
         var video = new Video({
           src: src,
-          width: 889,
-          height: 567,
-          controls: true
+          width: 890,
+          height: 594,
+          controls: true,
+          poster: "img/video.jpg"
         });
 
-        var videomodal = new Modal({title:"请观看下列视频"});
+        var videomodal = new Modal({
+          title:"请观看下面的视频",
+          name: "video"
+        });
         videomodal.on("cancel", function(){
             self.view.render("cancelVideo");
         });

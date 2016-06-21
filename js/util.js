@@ -88,10 +88,19 @@ var util = (function(){
           }
         } while (pos !== -1);
 
-        ele.setAttribute("finalStr",value);
+        ele.setAttribute(finalStr,value);
       }else{
         ele.dataset[str] = value;
       }
+    },
+
+    getStyle: function(element, cssPropertyName){
+        if(!window.getComputedStyle){
+            return element.currentStyle[cssPropertyName];
+        }
+        else {
+            return window.getComputedStyle(element)[cssPropertyName];
+        }
     },
 
     // element.children能够获取元素的元素子节点，但是低版本的ie不支持，如何在低版本的ie上兼容类似的功能。

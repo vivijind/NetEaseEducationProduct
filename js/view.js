@@ -169,7 +169,7 @@
                         nav.style.width = "962px";
                         ct.style.width = "962px";
                         mbd.style.width = "962px";
-                        sld.style.marginLeft = "-602px;";
+                        sld.style.marginLeft = "-602px";
                     } else {
                         tips.style.width = "1205px";
                         nav.style.width = "100%";

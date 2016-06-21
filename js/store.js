@@ -1,27 +1,36 @@
 (function () {
   // cors跨域请求兼容性处理
-  function createCORSRequest(method, url) {
+  function createCORSRequest(method, url, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-    // if ("withCredentials" in xhr) {
+    if ("withCredentials" in xhr) {
 
-    //   // Check if the XMLHttpRequest object has a "withCredentials" property.
-    //   // "withCredentials" only exists on XMLHTTPRequest2 objects.
-    //   xhr.open(method, url, true);
+      // Check if the XMLHttpRequest object has a "withCredentials" property.
+      // "withCredentials" only exists on XMLHTTPRequest2 objects.
+      xhr.open(method, url, true);
 
-    // } else if (typeof XDomainRequest != "undefined") {
+    } else if (typeof XDomainRequest != "undefined") {
 
-    //   // Otherwise, check if XDomainRequest.
-    //   // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-    //   xhr = new XDomainRequest();
-    //   xhr.open(method, url);
+      // Otherwise, check if XDomainRequest.
+      // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+      xhr = new XDomainRequest();
 
-    // } else {
+      // Response handlers.
+      xhr.onload = function() {
+        callback(xhr.responseText);
+      };
 
-    //   // Otherwise, CORS is not supported by the browser.
-    //   xhr = null;
+      xhr.onerror = function() {
+        alert('Woops, there was an error making the request.');
+      };
 
-    // }
+      xhr.open(method, url);
+
+    } else {
+
+      // Otherwise, CORS is not supported by the browser.
+      xhr = null;
+
+    }
     return xhr;
   }
 
@@ -94,7 +103,7 @@
       },
       get: function (url, options, callback) {
           var URL = url +'?'+ this.serialize(options);  //url+查询参数序列号结果 
-          var xhr = createCORSRequest('GET', URL);  //创建XHR对象
+          var xhr = createCORSRequest('GET', URL, callback);  //创建XHR对象
           if (!xhr) {
             throw new Error('CORS not supported');
           }
@@ -109,18 +118,11 @@
                   }
               }
           }
-          // Response handlers.
-          xhr.onload = function() {
-            callback(xhr.responseText);
-          };
-
-          xhr.onerror = function() {
-            alert('Woops, there was an error making the request.');
-          };
+          
           xhr.send(null);
       },
       post: function (url, options, callback) {
-          var xhr = createCORSRequest('GET', URL);  //创建XHR对象
+          var xhr = createCORSRequest('GET', URL, callback);  //创建XHR对象
           if (!xhr) {
             throw new Error('CORS not supported');
           }

@@ -60,7 +60,7 @@
 
       
       if (this.ie8) {
-        this.slider.style.marginTop = (-offsetAll*70) + "px";
+        this.slider.style.top = (-offsetAll*70) + "px";
       } else {
         // 容器偏移——动画
         this.slider.style.transform = "translateY(" + (-offsetAll*70) + "px) translateZ(0px)";
