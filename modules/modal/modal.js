@@ -9,10 +9,6 @@
             <h3 class="modal_head">标题</h3>\
             <div class="modal_body">内容</div>\
         </div>\
-        <div class="modal_foot">\
-	      <a class="confirm" href="#">确认</a>\
-	      <a class="cancel" href="#">取消</a>\
-	    </div>\
     </div>';
 
 	// Modal 实现
@@ -29,9 +25,6 @@
 	    this.body = _.$qs('.modal_body',this.container);
 	    // 获得取消节点
 		this.close = _.$qs(".modal_cancel",this.container);
-
-		this.foot = _.$qs(".modal_foot",this.container);
-		this.foot.style.display = "none";
 		
 		// 将options 复制到 组件实例上，让options.content等于this.content，这样使用比较简单
 	    _.extend(this, options);
