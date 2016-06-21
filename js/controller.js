@@ -17,6 +17,11 @@
       this._concernShow();
       this._sliderShow();
       this._hotCourseShow();
+      // ie8兼容性处理
+      if(navigator.userAgent.indexOf("MSIE 8.0")>0){//这里是重点，你懂的
+        this.isIE8 = true;
+        this._ie8set(); 
+      } 
   	};
 
 	  // Controller层事件
@@ -47,6 +52,10 @@
         });
 
         self.view.bind('resize', function(pageNo,psize,type) {
+          // ie8兼容性处理
+          if(this.isIE8){//这里是重点，你懂的
+            this._ie8set(); 
+          }
           self.model.setCourse(pageNo,psize,type);
           self.updateCourse(self._updateCursor);
         });
@@ -328,6 +337,11 @@
         });
         // 调用
         videomodal.show(video.video);
+      },
+      // 针对ie8进行兼容性处理
+      _ie8set: function() {
+        // media查询
+        this.view.render("ie8");
       }
     });
 

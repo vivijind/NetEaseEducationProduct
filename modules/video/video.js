@@ -17,6 +17,9 @@
 
 	    this.video = this._layout.cloneNode(true);
 	    this.videoNode = _.$qs(".video",this.video);
+	    if (!this.videoNode) {
+	    	return;
+	    }
 
 	    // 初始化
 	    this._init();

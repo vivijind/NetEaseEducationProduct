@@ -157,6 +157,26 @@
                 },
                 cancelVideo: function() {
                     self.$videoIcon.style.display = "block";
+                },
+                ie8: function() {
+                    var tips = _.$qs(".g-tips .m-tips");
+                    var nav = _.$qs(".m-nav");
+                    var ct = _.$qs(".m-ct");
+                    var mbd = _.$qs(".g-bd .g-mbd");
+                    var sld = _.$qs(".g-hd .m-sld");
+                    if (self.width <= 1205) {
+                        tips.style.width = "962px";
+                        nav.style.width = "962px";
+                        ct.style.width = "962px";
+                        mbd.style.width = "962px";
+                        sld.style.margin = "auto auto auto -602px;";
+                    } else {
+                        tips.style.width = "100%";
+                        nav.style.width = "100%";
+                        ct.style.width = "100%";
+                        mbd.style.width = "100%";
+                        sld.style.margin = "auto auto auto -50%";
+                    }
                 }
             };
 

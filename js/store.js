@@ -108,8 +108,14 @@
                   }
               }
           }
+          // Response handlers.
+          xhr.onload = function() {
+            callback(xhr.responseText);
+          };
 
-          xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); //放在open后执行，表示文本内容的编码方式是URL编码，即除了标准字符外，每字节以双字节16进制前加个“%”表示
+          xhr.onerror = function() {
+            alert('Woops, there was an error making the request.');
+          };
           xhr.send(null);
       },
       post: function (url, options, callback) {
