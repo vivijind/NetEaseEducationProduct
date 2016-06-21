@@ -71,7 +71,7 @@
 				return;
 			}
 			var index = this.crtIndex-1;
-			this._update(index);
+			this.update(index);
 		},
 
 		doNext: function() {
@@ -80,7 +80,7 @@
 				return;
 			}
 			var index = this.crtIndex+1;
-			this._update(index);
+			this.update(index);
 		},
 
 		_select: function() {
