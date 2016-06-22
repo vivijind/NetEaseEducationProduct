@@ -1,7 +1,9 @@
 # 网易前端微专业——网易教育产品部首页实现
 ## 展示页面
 [网易教育产品部介绍展示页面](http://115.159.97.188/NetEaseEducationProduct/index.html)
+
 [github地址](https://github.com/vivijind/NetEaseEducationProduct)
+
 [借鉴规范——网易NEC框架规范](http://nec.netease.com/)
 
 ## 整体设计及文件说明
@@ -94,11 +96,11 @@ ie8的动画做兼容处理
 ie8下做兼容处理
 
 ## 还需要解决的问题
-[x]slider组件完善：继承和派生，拖拽问题
-[x]热门课程推荐轮播组件的鼠标滚轮事件
-[x]video自定义控件的事件
-[x]测试及性能优化
-[x]打包
+- [x]slider组件完善：继承和派生，拖拽问题
+- [x]热门课程推荐轮播组件的鼠标滚轮事件
+- [x]video自定义控件的事件
+- [x]测试及性能优化
+- [x]打包
 
 ## 更新日志
 ### 2016.6.22
