@@ -3,19 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>video</title>
+    <style type="text/css">
+        html,body *{padding:0;margin:0;}
+        .controls{
+            width:890px;
+        }
+        .control { 
+            height:21px;
+            background:url(videoControls.png) repeat;
+            color:#5b5b5b;
+            font: 7px/21px "微软雅黑";
+        }
+        .control *{
+            display:inline-block;
+            vertical-align:top;
+            height:21px;
+        }
+        .control .pause{
+            width: 21px;
+            background:url(videoControls.png) no-repeat;
+            background-position:0 -147px;
+        }
+        .control .current{
+            margin-left:10px;
+            color:#fff;
+        }
+        .control .volume,.resolution,.full,.logo{
+            float:right;
+            background:url(videoControls.png) no-repeat;
+        }
+        .control .volume {
+            width:20px;
+            background-position:0 -120px;
+        }
+        .control .resolution{
+            width:33px;
+            background-position:-24px -120px;
+        }
+        .control .full{
+            width:24px;
+            background-position:-24px -147px;
+        }
+        .control .logo{
+            width:55px;
+            background-position:0 -93px;
+        }
+        .progress {
+            position:relative;
+            height: 7px;
+            background-color:#393939;
+        }
+        .progress *{
+            height: 7px;
+        }
+        .progress-bar{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .progress-bar.play{
+            background-color: #00a851;
+            width:30px;
+        }
+        .progress-bar.cache{
+            background-color: #555;
+            width:60px;
+        }
+        .progress-bar .dragball{
+            position:absolute;
+            right:-5px;
+            width:8px;
+            border-radius:6px;
+            background-color:#fff;
+        }
+    </style>
 </head>
 <body>
-    <div class="m-modal">
-        <div class="modal_mask"></div>
-        <div class="modal_wrap">
-            <i class="modal_cancel"></i>
-            <h3 class="modal_head">登录网易云课堂</h3>
-            <div class="modal_message">登录失败</div>
-            <div id="login" class="modal_body">
-                <video src="http://mov.bn.netease.com/open-movie/nos/mp4/2014/12/30/SADQ86F5S_shd.mp4" width="889" height="567" controls="controls"></video>
+    <div clas="m-video">
+        <video class="video" width="890" height="594" src="http://mov.bn.netease.com/open-movie/nos/mp4/2014/12/30/SADQ86F5S_shd.mp4">浏览器不兼容该video播放，请升级浏览器或更换chrome等其他浏览器</video>
+        <div class="controls">
+            <div class="control">
+                <div class="pause"></div>
+                <div class="current">00:21</div>
+                /
+                <div class="total">07:18</div>
+                <div class="logo"></div>
+                <div class="full"></div>
+                <div class="resolution"></div>
+                <div class="volume"></div>    
             </div>
-            <div class="modal_foot">
-                <button class="login">登录</button>
+            <div class="progress">
+                <div class="progress-bar cache"></div>
+                <div class="progress-bar play">
+                    <div class="dragball"></div>
+                </div>
             </div>
         </div>
     </div>

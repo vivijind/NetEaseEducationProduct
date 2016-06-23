@@ -174,6 +174,73 @@
       this.emit("nav",{pageIndex:pageIndex, slideIndex: slideIndex});
     },
 
+    // 拖拽
+    _initDrag: function() {
+      // 拖拽初始化
+      this._dragInfo = {};
+      _.addEvent(this.slider,"mousedown", this._dragstart.bind(this));
+      _.addEvent(this.slider,"mousemove", this._dragmove.bind(this));
+      _.addEvent(this.slider,"mouseup", this._dragend.bind(this));
+      _.addEvent(this.slider,"mouseleave", this._dragend.bind(this));
+    },
+
+    _dragstart: function(ev) {
+      var dragInfo = this._dragInfo;
+      dragInfo.start = {x: ev.pageX, y: ev.pageY};
+    },
+
+    _dragmove: function(ev) {
+      var dragInfo = this._dragInfo;
+      if(!dragInfo.start) return;
+
+      // 默认，及选取清除
+      _.preventDefault(ev);
+      this.slider.style.transitionDuration = '0s';
+
+      var start = dragInfo.start;
+      // 清除恼人的选区
+      if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+      } else if (window.document.selection) {
+        window.document.selection.empty();
+      }
+
+      // 加translateZ 分量是为了触发硬件加速
+      this.slider.style.transform = (this.directionH? 'translateX(': 'translateY(')
+        +  (-(this.offset * this.offsetAll - ev.pageX+start.x)) + 'px) translateZ(0)'
+
+    },
+
+    _dragend: function( ev ){
+
+      var dragInfo = this._dragInfo;
+      if(!dragInfo.start) return;
+
+      _.preventDefault(ev);
+      var start = dragInfo.start;
+      this._dragInfo = {};
+      var pageX = ev.pageX,
+          pageY = ev.pageY;
+
+      // 看走了多少距离_根据拖拽方向判断
+      var delt = pageX - start.x;
+      if (!this.directionH) {
+          // 如果非横向，则为纵向
+          delt = pageY - start.y;
+      }
+
+      if (delt === 0) {
+        this.isDragging = false;
+      } else {
+        this.isDragging = true;
+      }
+      
+      if( Math.abs(delt) > this.breakPoint ){
+        this._step(delt>0? -1: 1)
+      }else{
+        this._step(0)
+      }
+    },
     // 自动轮播相关
     _initAuto: function() {
       this.timmer = null;

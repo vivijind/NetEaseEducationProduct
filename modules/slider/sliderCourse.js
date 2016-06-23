@@ -1,4 +1,5 @@
 ;(function(_){
+  // 通过模板来设定当前显示的轮播项
   var template = 
   '<div class="m-slider hotcourse" >\
     <div class="slide"></div>\
