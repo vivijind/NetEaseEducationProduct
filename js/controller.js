@@ -331,7 +331,6 @@
           src: src,
           width: 890,
           height: 594,
-          controls: true,
           poster: "img/video.jpg"
         });
 

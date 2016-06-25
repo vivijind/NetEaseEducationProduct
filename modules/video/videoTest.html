@@ -5,10 +5,31 @@
     <title>video</title>
     <style type="text/css">
         html,body *{padding:0;margin:0;}
-        .controls{
+
+        .m-video {
+            position: relative;
+            overflow: hidden;
             width:890px;
+            height:567px;
+            background-color:black;
+            overflow:hidden;
+        }
+        .playIcon{
+            position: absolute;
+            bottom: 8.2%;
+            left: 2.2%;
+            width: 60px;
+            height: 60px;
+            background:url(videoControls.png) no-repeat;
+            background-position:0 -27px;
+        }
+        .controls{
+            position: absolute;
+            bottom: 0;
+            width:100%;
         }
         .control { 
+            
             height:21px;
             background:url(videoControls.png) repeat;
             color:#5b5b5b;
@@ -79,8 +100,9 @@
     </style>
 </head>
 <body>
-    <div clas="m-video">
-        <video class="video" width="890" height="594" src="http://mov.bn.netease.com/open-movie/nos/mp4/2014/12/30/SADQ86F5S_shd.mp4">浏览器不兼容该video播放，请升级浏览器或更换chrome等其他浏览器</video>
+    <div class="m-video">
+        <video class="video" width="890" height="594" src="http://mov.bn.netease.com/open-movie/nos/mp4/2014/12/30/SADQ86F5S_shd.mp4" poster="video.jpg">浏览器不兼容该视频播放，请升级浏览器或更换chrome等其他浏览器</video>
+        <div class="playIcon"></div>
         <div class="controls">
             <div class="control">
                 <div class="pause"></div>
@@ -90,7 +112,7 @@
                 <div class="logo"></div>
                 <div class="full"></div>
                 <div class="resolution"></div>
-                <div class="volume"></div>    
+                <div class="volume"></div> 
             </div>
             <div class="progress">
                 <div class="progress-bar cache"></div>
