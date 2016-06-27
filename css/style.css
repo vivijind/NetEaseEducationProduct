@@ -209,7 +209,7 @@ body{font:12px/22px "微软雅黑";color:#333;outline:0;background:#fff;}
 .m-modal.login .modal_body input{width:295px;height:45px;border:1px solid #dfdfdf;box-shadow:1px 1px 0 1px #f1f1f1 inset;font:16px/45px "微软雅黑";text-indent:11px;}
 .m-modal.login .modal_body input:focus{border:1px solid #497df4;}
 .m-modal.login .modal_body input+input{margin-top:15px;}
-.m-modal.login .modal_body button{width:293px;height:46px;margin-top:29px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;letter-spacing:3px;font:16px/46px "微软雅黑";}
+.m-modal.login .modal_body button{width:293px;height:46px;margin-top:29px;background:url(../img/icon.png) no-repeat;background-position:0 -83px;box-shadow:1px 1px 0 1px #d5e3da;border:none;color:#fff;letter-spacing:3px;font:bold 16px/46px "微软雅黑";}
 .m-modal.login .modal_body .form-tip{display:none;margin-bottom:10px;}
 .m-modal.login .modal_body .form-tip.success{color:#0f0;}
 .m-modal.login .modal_body .form-tip.fail{color:#f00;}

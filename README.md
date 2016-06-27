@@ -118,5 +118,6 @@ ie8下做兼容处理
 * 修改指示器选择和更新的bug（点击prev和next不更新数据问题）
 * 解决ie8中弹窗组件的透明度兼容问题（使用filter）
 * 完成video兼容性测试
+* 继承采取Object.create方式，并兼容ie8
 
 
