@@ -49,8 +49,6 @@
     // 动画设置
     this.fadeTime = this.fadeTime || 500;
 
-
-
     // 轮播，并响应鼠标移动上去暂停轮播事件
     if(this.auto) {
       this.intervalTime = this.intervalTime || 3000;

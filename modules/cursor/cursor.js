@@ -71,7 +71,7 @@
 				return;
 			}
 			var index = this.crtIndex-1;
-			this.update(index);
+			this.select(index);
 		},
 
 		doNext: function() {
@@ -80,24 +80,13 @@
 				return;
 			}
 			var index = this.crtIndex+1;
-			this.update(index);
+			this.select(index);
 		},
 
-		_select: function() {
-			var target = _.getTarget(event);
-			var index = _.getDataset(target,'index');
-			if (index === "more") {
-				return;
-			} else if(index === "prev") {
-				this.doPrev();
-			} else if (index === "next") {
-				this.doNext();
-			} else {
-				index = parseInt(index);
-				this.update(index);
-				// 触发select事件
-            	this.emit('select',this.cursorData[index],index);
-			}
+		select: function(selIndex) {
+			// 触发select事件
+            this.emit('select',this.cursorData[selIndex],selIndex);
+            this.update(selIndex);
 		},
 
 		update: function(selIndex) {
@@ -154,6 +143,21 @@
 				} else if ((selIndex === 0 && i === 0) || ((i === cursorNum-1) && selIndex === dataNum-1)) {
 					_.addClass(cursor,'crt');
 				}
+			}
+		},
+
+		_select: function() {
+			var target = _.getTarget(event);
+			var index = _.getDataset(target,'index');
+			if (index === "more") {
+				return;
+			} else if(index === "prev") {
+				this.doPrev();
+			} else if (index === "next") {
+				this.doNext();
+			} else {
+				index = parseInt(index);
+				this.select(index);
 			}
 		},
 

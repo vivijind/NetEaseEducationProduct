@@ -7,7 +7,7 @@
 	// 表单 主体html模板
 	var template = 
 	'<div class="m-video">\
-        <video class="video" preload="auto">浏览器不兼容该视频播放，请升级浏览器或更换chrome等其他浏览器</video>\
+        <video class="video" preload="auto">当前浏览器不兼容该视频播放，请升级浏览器或更换chrome等其他浏览器</video>\
         <div class="controls">\
         	<div class="playIcon"></div>\
             <div class="control">\

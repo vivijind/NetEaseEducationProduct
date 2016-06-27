@@ -3,6 +3,7 @@
 	// modal 主体html模板
 	var template = 
 	'<div class="m-modal">\
+		<div class="modal_mask"></div>\
         <div class="modal_align"></div>\
         <div class="modal_wrap">\
             <i class="modal_cancel"></i>\

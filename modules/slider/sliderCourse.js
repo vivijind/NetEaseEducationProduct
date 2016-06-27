@@ -30,14 +30,13 @@
     Slider.call(this,opt);
 
     this.pageNum = this.courses? this.courses.length : 3;
-    this.directionH = false;
 
     // ie8 transform兼容处理
     this.ie8 = navigator.userAgent.indexOf("MSIE 8.0")>0? true: false;
   }
 
   // 继承方法
-  SliderCourse.prototype = new Slider();
+  SliderCourse.prototype = Object.create(Slider.prototype);
   SliderCourse.prototype.constructor = SliderCourse;
   SliderCourse.prototype._layout = _.html2node(template);
 
